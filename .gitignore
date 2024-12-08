@@ -47,3 +47,14 @@ storage/app/*
 
 !storage/app/framework/
 !storage/app/loggs/
+
+/.phpunit.cache
+/public/build
+/storage/pail
+.env.backup
+.env.production
+.phpactor.json
+auth.json
+/.fleet
+/.nova
+/.zed
