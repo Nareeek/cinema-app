@@ -16,6 +16,8 @@ public_html/storage
 public_html/hot
 
 storage/*.key
+.vscode/
+.idea/
 .env
 Homestead.yaml
 Homestead.json
@@ -29,3 +31,12 @@ Thumbs.db
 
 # Docker-specific ignores
 docker-compose.override.yml
+
+bootstrap/cache/
+storage/framework/cache/
+
+
+storage/app/*
+
+!storage/app/framework/
+!storage/app/loggs/
