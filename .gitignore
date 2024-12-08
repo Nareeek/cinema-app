@@ -18,7 +18,10 @@ public_html/hot
 storage/*.key
 .vscode/
 .idea/
+
 .env
+.env_initial
+
 Homestead.yaml
 Homestead.json
 /.vagrant
