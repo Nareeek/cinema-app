@@ -3,20 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\Seat;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
 
 class SeatController extends Controller
 {
-    // Check seat availability
+    // Check seat availability for a schedule
     public function availability($id)
     {
-        $schedule = Schedule::with('room.seats')->findOrFail($id);
-        $bookedSeats = Booking::where('schedule_id', $id)->pluck('seat_id');
+        $seats = Seat::where('room_id', function ($query) use ($id) {
+            $query->select('room_id')->from('schedules')->where('id', $id)->limit(1);
+        })->get();
 
-        $seats = $schedule->room->seats->map(function ($seat) use ($bookedSeats) {
-            $seat->is_booked = $bookedSeats->contains($seat->id);
-            return $seat;
+        $bookedSeats = Booking::where('schedule_id', $id)->pluck('seat_id')->toArray();
+
+        $seats->each(function ($seat) use ($bookedSeats) {
+            $seat->is_booked = in_array($seat->id, $bookedSeats);
         });
 
         return response()->json($seats);
@@ -28,23 +31,29 @@ class SeatController extends Controller
         $validated = $request->validate([
             'seat_id' => 'required|exists:seats,id',
             'user_email' => 'required|email',
-            'user_phone' => 'required|string',
+            'user_phone' => 'required|string|min:10',
+            'status' => 'required|string|in:Pending,Confirmed',
         ]);
 
-        $seatAlreadyBooked = Booking::where('schedule_id', $id)
-            ->where('seat_id', $validated['seat_id'])
+        // Ensure the schedule exists
+        $schedule = Schedule::findOrFail($id);
+
+        // Check if the seat is already booked for this schedule
+        $isSeatBooked = Booking::where('schedule_id', $id)
+            ->where('seat_id', $request->seat_id)
             ->exists();
 
-        if ($seatAlreadyBooked) {
-            return response()->json(['error' => 'Seat already booked'], 400);
+        if ($isSeatBooked) {
+            return response()->json(['error' => 'This seat is already booked for this schedule.'], 422);
         }
 
+        // Create the booking
         $booking = Booking::create([
             'schedule_id' => $id,
-            'seat_id' => $validated['seat_id'],
+            'seat_id' => $request->seat_id,
             'user_email' => $validated['user_email'],
             'user_phone' => $validated['user_phone'],
-            'status' => 'Confirmed',
+            'status' => $validated['status'],
         ]);
 
         return response()->json($booking, 201);
