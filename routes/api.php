@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RoomController;
+use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\SeatController;
 
@@ -31,3 +31,22 @@ Route::get('/movies/{id}', [MovieController::class, 'show']); // Movie details w
 
 Route::get('/schedules/{id}/seats', [SeatController::class, 'availability']); // Seat availability
 Route::post('/schedules/{id}/book', [SeatController::class, 'book']); // Book a seat
+
+// Room CRUD API routes
+Route::prefix('admin')->group(function () {
+    Route::get('/rooms', [RoomController::class, 'index']); // List rooms
+    Route::post('/rooms', [RoomController::class, 'store']); // Create room
+    Route::get('/rooms/{id}', [RoomController::class, 'show']); // Get room details
+    Route::put('/rooms/{id}', [RoomController::class, 'update']); // Update room
+    Route::delete('/rooms/{id}', [RoomController::class, 'destroy']); // Delete room
+});
+
+
+// Movie CRUD API routes
+Route::prefix('admin')->group(function () {
+    Route::get('/movies', [MovieController::class, 'index']); // List movies
+    Route::post('/movies', [MovieController::class, 'store']); // Create movie
+    Route::get('/movies/{id}', [MovieController::class, 'show']); // Get movie details
+    Route::put('/movies/{id}', [MovieController::class, 'update']); // Update movie
+    Route::delete('/movies/{id}', [MovieController::class, 'destroy']); // Delete movie
+});
