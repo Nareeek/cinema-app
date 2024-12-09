@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('status')->default('Pending'); // Booking status: Pending, Confirmed
             $table->timestamps(); // created_at, updated_at
             $table->softDeletes(); // Soft deletion timestamp
-        
+
             // Add unique constraint
             $table->unique(['schedule_id', 'seat_id'], 'unique_schedule_seat');
         });
