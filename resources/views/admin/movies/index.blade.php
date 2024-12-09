@@ -6,7 +6,8 @@
     <h1>Movie Management</h1>
     <button onclick="showMovieForm()">Add New Movie</button>
     <div id="movie-form" style="display: none;">
-        <form id="create-movie-form">
+        <form id="movie-form-data">
+            <input type="hidden" id="movie-id">
             <label for="title">Title:</label>
             <input type="text" id="title" name="title" required><br>
 
@@ -54,8 +55,22 @@
         fetchMovies();
 
         // Show the movie form
-        function showMovieForm() {
-            document.getElementById('movie-form').style.display = 'block';
+        function showMovieForm(movie = null) {
+            const form = document.getElementById('movie-form');
+            form.style.display = 'block';
+
+            // If editing, populate form fields
+            if (movie) {
+                document.getElementById('movie-id').value = movie.id;
+                document.getElementById('title').value = movie.title;
+                document.getElementById('description').value = movie.description;
+                document.getElementById('poster_url').value = movie.poster_url;
+                document.getElementById('trailer_url').value = movie.trailer_url;
+                document.getElementById('duration').value = movie.duration;
+            } else {
+                document.getElementById('movie-form-data').reset();
+                document.getElementById('movie-id').value = '';
+            }
         }
 
         // Hide the movie form
@@ -63,14 +78,18 @@
             document.getElementById('movie-form').style.display = 'none';
         }
 
-        // Create a new movie
-        document.getElementById('create-movie-form').addEventListener('submit', function (e) {
+        // Save (Create or Update) a movie
+        document.getElementById('movie-form-data').addEventListener('submit', function (e) {
             e.preventDefault();
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
+            const movieId = document.getElementById('movie-id').value;
 
-            fetch('/api/admin/movies', {
-                method: 'POST',
+            const method = movieId ? 'PUT' : 'POST';
+            const endpoint = movieId ? `/api/admin/movies/${movieId}` : '/api/admin/movies';
+
+            fetch(endpoint, {
+                method: method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
             })
@@ -80,15 +99,19 @@
                 });
         });
 
+        // Edit a movie
+        function editMovie(id) {
+            fetch(`/api/admin/movies/${id}`)
+                .then(response => response.json())
+                .then(movie => {
+                    showMovieForm(movie);
+                });
+        }
+
         // Delete a movie
         function deleteMovie(id) {
             fetch(`/api/admin/movies/${id}`, { method: 'DELETE' })
                 .then(() => fetchMovies());
-        }
-
-        // Placeholder for editing (future implementation)
-        function editMovie(id) {
-            alert('Editing movies is not yet implemented!');
         }
     </script>
 @endsection

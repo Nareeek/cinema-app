@@ -6,7 +6,8 @@
     <h1>Room Management</h1>
     <button onclick="showRoomForm()">Add New Room</button>
     <div id="room-form" style="display: none;">
-        <form id="create-room-form">
+        <form id="room-form-data">
+            <input type="hidden" id="room-id">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required><br>
 
@@ -51,8 +52,21 @@
         fetchRooms();
 
         // Show the room form
-        function showRoomForm() {
-            document.getElementById('room-form').style.display = 'block';
+        function showRoomForm(room = null) {
+            const form = document.getElementById('room-form');
+            form.style.display = 'block';
+
+            // If editing, populate form fields
+            if (room) {
+                document.getElementById('room-id').value = room.id;
+                document.getElementById('name').value = room.name;
+                document.getElementById('type').value = room.type;
+                document.getElementById('description').value = room.description;
+                document.getElementById('capacity').value = room.capacity;
+            } else {
+                document.getElementById('room-form-data').reset();
+                document.getElementById('room-id').value = '';
+            }
         }
 
         // Hide the room form
@@ -60,14 +74,18 @@
             document.getElementById('room-form').style.display = 'none';
         }
 
-        // Create a new room
-        document.getElementById('create-room-form').addEventListener('submit', function (e) {
+        // Save (Create or Update) a room
+        document.getElementById('room-form-data').addEventListener('submit', function (e) {
             e.preventDefault();
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
+            const roomId = document.getElementById('room-id').value;
 
-            fetch('/api/admin/rooms', {
-                method: 'POST',
+            const method = roomId ? 'PUT' : 'POST';
+            const endpoint = roomId ? `/api/admin/rooms/${roomId}` : '/api/admin/rooms';
+
+            fetch(endpoint, {
+                method: method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
             })
@@ -77,15 +95,19 @@
                 });
         });
 
+        // Edit a room
+        function editRoom(id) {
+            fetch(`/api/admin/rooms/${id}`)
+                .then(response => response.json())
+                .then(room => {
+                    showRoomForm(room);
+                });
+        }
+
         // Delete a room
         function deleteRoom(id) {
             fetch(`/api/admin/rooms/${id}`, { method: 'DELETE' })
                 .then(() => fetchRooms());
-        }
-
-        // Placeholder for editing (future implementation)
-        function editRoom(id) {
-            alert('Editing rooms is not yet implemented!');
         }
     </script>
 @endsection
