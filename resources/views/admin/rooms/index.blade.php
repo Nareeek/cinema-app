@@ -4,58 +4,88 @@
 
 @section('content')
     <h1>Room Management</h1>
-    <button onclick="createRoom()">Add New Room</button>
+    <button onclick="showRoomForm()">Add New Room</button>
+    <div id="room-form" style="display: none;">
+        <form id="create-room-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br>
+
+            <label for="type">Type:</label>
+            <input type="text" id="type" name="type" required><br>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description"></textarea><br>
+
+            <label for="capacity">Capacity:</label>
+            <input type="number" id="capacity" name="capacity" required><br>
+
+            <button type="submit">Save Room</button>
+            <button type="button" onclick="hideRoomForm()">Cancel</button>
+        </form>
+    </div>
     <div id="rooms"></div>
 
     <script>
-        // Fetch and display rooms
-        fetch('/api/admin/rooms')
-            .then(response => response.json())
-            .then(data => {
-                const container = document.getElementById('rooms');
-                data.forEach(room => {
-                    const div = document.createElement('div');
-                    div.innerHTML = `
-                        <h2>${room.name}</h2>
-                        <p>Type: ${room.type}</p>
-                        <p>Description: ${room.description || 'No description'}</p>
-                        <p>Capacity: ${room.capacity}</p>
-                        <button onclick="viewSchedules(${room.id}, this)">View Schedules</button>
-                        <div class="schedules" style="display: none;"></div>
-                        <button onclick="editRoom(${room.id})">Edit</button>
-                        <button onclick="deleteRoom(${room.id})">Delete</button>
-                    `;
-                    container.appendChild(div);
-                });
-            });
-
-        // Fetch and display schedules for the room
-        function viewSchedules(roomId, button) {
-            const schedulesDiv = button.nextElementSibling;
-            if (schedulesDiv.style.display === 'none') {
-                fetch(`/api/rooms/${roomId}/schedules`)
-                    .then(response => response.json())
-                    .then(schedules => {
-                        schedulesDiv.innerHTML = schedules.map(schedule => `
-                            <p>Movie: ${schedule.movie.title} at ${schedule.schedule_time}</p>
-                        `).join('');
-                        schedulesDiv.style.display = 'block';
+        // Fetch and display all rooms
+        function fetchRooms() {
+            fetch('/api/admin/rooms')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('rooms');
+                    container.innerHTML = ''; // Clear previous content
+                    data.forEach(room => {
+                        const div = document.createElement('div');
+                        div.innerHTML = `
+                            <h2>${room.name}</h2>
+                            <p>Type: ${room.type}</p>
+                            <p>Description: ${room.description || 'No description'}</p>
+                            <p>Capacity: ${room.capacity}</p>
+                            <button onclick="editRoom(${room.id})">Edit</button>
+                            <button onclick="deleteRoom(${room.id})">Delete</button>
+                        `;
+                        container.appendChild(div);
                     });
-            } else {
-                schedulesDiv.style.display = 'none'; // Collapse if already open
-            }
+                });
         }
 
-        function createRoom() {
-            alert('Redirect to room creation form');
+        fetchRooms();
+
+        // Show the room form
+        function showRoomForm() {
+            document.getElementById('room-form').style.display = 'block';
         }
 
-        function editRoom(id) {
-            alert('Redirect to edit form for room ' + id);
+        // Hide the room form
+        function hideRoomForm() {
+            document.getElementById('room-form').style.display = 'none';
         }
 
+        // Create a new room
+        document.getElementById('create-room-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            fetch('/api/admin/rooms', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            })
+                .then(() => {
+                    fetchRooms(); // Refresh room list
+                    hideRoomForm();
+                });
+        });
+
+        // Delete a room
         function deleteRoom(id) {
-            alert('Delete room with id ' + id);
+            fetch(`/api/admin/rooms/${id}`, { method: 'DELETE' })
+                .then(() => fetchRooms());
+        }
+
+        // Placeholder for editing (future implementation)
+        function editRoom(id) {
+            alert('Editing rooms is not yet implemented!');
         }
     </script>
 @endsection
