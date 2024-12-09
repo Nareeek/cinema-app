@@ -8,7 +8,7 @@
     <div id="rooms"></div>
 
     <script>
-        // Fetch all rooms and display them
+        // Fetch and display rooms
         fetch('/api/admin/rooms')
             .then(response => response.json())
             .then(data => {
@@ -20,12 +20,31 @@
                         <p>Type: ${room.type}</p>
                         <p>Description: ${room.description || 'No description'}</p>
                         <p>Capacity: ${room.capacity}</p>
+                        <button onclick="viewSchedules(${room.id}, this)">View Schedules</button>
+                        <div class="schedules" style="display: none;"></div>
                         <button onclick="editRoom(${room.id})">Edit</button>
                         <button onclick="deleteRoom(${room.id})">Delete</button>
                     `;
                     container.appendChild(div);
                 });
             });
+
+        // Fetch and display schedules for the room
+        function viewSchedules(roomId, button) {
+            const schedulesDiv = button.nextElementSibling;
+            if (schedulesDiv.style.display === 'none') {
+                fetch(`/api/rooms/${roomId}/schedules`)
+                    .then(response => response.json())
+                    .then(schedules => {
+                        schedulesDiv.innerHTML = schedules.map(schedule => `
+                            <p>Movie: ${schedule.movie.title} at ${schedule.schedule_time}</p>
+                        `).join('');
+                        schedulesDiv.style.display = 'block';
+                    });
+            } else {
+                schedulesDiv.style.display = 'none'; // Collapse if already open
+            }
+        }
 
         function createRoom() {
             alert('Redirect to room creation form');
