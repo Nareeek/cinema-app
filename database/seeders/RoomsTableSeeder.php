@@ -13,6 +13,18 @@ class RoomsTableSeeder extends Seeder
      */
     public function run()
     {
-        Room::create(['name' => 'Red', 'type' => 'Regular', 'description' => 'Default Room', 'capacity' => 100]);
+        Room::create([
+            'name' => 'Red Room',
+            'type' => 'Regular',
+            'description' => 'Main hall with large screen',
+            'capacity' => 100,
+        ]);
+
+        Room::create([
+            'name' => 'VIP Room',
+            'type' => 'VIP',
+            'description' => 'Luxury seating with personalized service',
+            'capacity' => 50,
+        ]);
     }
 }
