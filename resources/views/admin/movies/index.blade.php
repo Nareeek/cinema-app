@@ -4,114 +4,111 @@
 
 @section('content')
     <h1>Movie Management</h1>
-    <button onclick="showMovieForm()">Add New Movie</button>
-    <div id="movie-form" style="display: none;">
-        <form id="movie-form-data">
-            <input type="hidden" id="movie-id">
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" required><br>
 
-            <label for="description">Description:</label>
-            <textarea id="description" name="description"></textarea><br>
+    <!-- Add Movie Form -->
+    <form id="add-movie-form" enctype="multipart/form-data">
+        <h2>Add New Movie</h2>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br>
 
-            <label for="poster_url">Poster URL:</label>
-            <input type="url" id="poster_url" name="poster_url" required><br>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea><br>
 
-            <label for="trailer_url">Trailer URL:</label>
-            <input type="url" id="trailer_url" name="trailer_url"><br>
+        <label for="poster_url">Poster (URL):</label>
+        <input type="text" id="poster_url" name="poster_url"><br>
 
-            <label for="duration">Duration (minutes):</label>
-            <input type="number" id="duration" name="duration" required><br>
+        <label for="trailer_url">Trailer (URL):</label>
+        <input type="text" id="trailer_url" name="trailer_url"><br>
 
-            <button type="submit">Save Movie</button>
-            <button type="button" onclick="hideMovieForm()">Cancel</button>
-        </form>
-    </div>
-    <div id="movies"></div>
+        <label for="duration">Duration (minutes):</label>
+        <input type="number" id="duration" name="duration" required><br>
+
+        <button type="submit">Add Movie</button>
+    </form>
+
+    <!-- Movies Table -->
+    <h2>Existing Movies</h2>
+    <table id="movies-table" border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Duration</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
     <script>
-        // Fetch and display all movies
-        function fetchMovies() {
+        // Fetch and display movies
+        function loadMovies() {
             fetch('/api/admin/movies')
                 .then(response => response.json())
                 .then(data => {
-                    const container = document.getElementById('movies');
-                    container.innerHTML = ''; // Clear previous content
+                    const tableBody = document.querySelector('#movies-table tbody');
+                    tableBody.innerHTML = ''; // Clear table
                     data.forEach(movie => {
-                        const div = document.createElement('div');
-                        div.innerHTML = `
-                            <h2>${movie.title}</h2>
-                            <p>Description: ${movie.description || 'No description'}</p>
-                            <p>Duration: ${movie.duration} minutes</p>
-                            <img src="${movie.poster_url}" alt="Poster for ${movie.title}" style="width: 150px;">
-                            <button onclick="editMovie(${movie.id})">Edit</button>
-                            <button onclick="deleteMovie(${movie.id})">Delete</button>
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${movie.id}</td>
+                            <td>${movie.title}</td>
+                            <td>${movie.description || 'N/A'}</td>
+                            <td>${movie.duration} min</td>
+                            <td>
+                                <button onclick="deleteMovie(${movie.id})">Delete</button>
+                                <button onclick="editMovie(${movie.id})">Edit</button>
+                            </td>
                         `;
-                        container.appendChild(div);
+                        tableBody.appendChild(row);
                     });
                 });
         }
 
-        fetchMovies();
-
-        // Show the movie form
-        function showMovieForm(movie = null) {
-            const form = document.getElementById('movie-form');
-            form.style.display = 'block';
-
-            // If editing, populate form fields
-            if (movie) {
-                document.getElementById('movie-id').value = movie.id;
-                document.getElementById('title').value = movie.title;
-                document.getElementById('description').value = movie.description;
-                document.getElementById('poster_url').value = movie.poster_url;
-                document.getElementById('trailer_url').value = movie.trailer_url;
-                document.getElementById('duration').value = movie.duration;
-            } else {
-                document.getElementById('movie-form-data').reset();
-                document.getElementById('movie-id').value = '';
-            }
-        }
-
-        // Hide the movie form
-        function hideMovieForm() {
-            document.getElementById('movie-form').style.display = 'none';
-        }
-
-        // Save (Create or Update) a movie
-        document.getElementById('movie-form-data').addEventListener('submit', function (e) {
+        // Handle form submission for adding a new movie
+        document.getElementById('add-movie-form').addEventListener('submit', function (e) {
             e.preventDefault();
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
-            const movieId = document.getElementById('movie-id').value;
 
-            const method = movieId ? 'PUT' : 'POST';
-            const endpoint = movieId ? `/api/admin/movies/${movieId}` : '/api/admin/movies';
-
-            fetch(endpoint, {
-                method: method,
+            fetch('/api/admin/movies', {
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
             })
-                .then(() => {
-                    fetchMovies(); // Refresh movie list
-                    hideMovieForm();
+                .then(response => {
+                    if (response.ok) {
+                        alert('Movie added successfully!');
+                        loadMovies(); // Refresh table
+                        this.reset(); // Reset form
+                    } else {
+                        alert('Failed to add movie.');
+                    }
                 });
         });
 
-        // Edit a movie
-        function editMovie(id) {
-            fetch(`/api/admin/movies/${id}`)
-                .then(response => response.json())
-                .then(movie => {
-                    showMovieForm(movie);
+        // Delete a movie
+        function deleteMovie(id) {
+            fetch(`/api/admin/movies/${id}`, {
+                method: 'DELETE',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Movie deleted successfully!');
+                        loadMovies(); // Refresh table
+                    } else {
+                        alert('Failed to delete movie.');
+                    }
                 });
         }
 
-        // Delete a movie
-        function deleteMovie(id) {
-            fetch(`/api/admin/movies/${id}`, { method: 'DELETE' })
-                .then(() => fetchMovies());
+        // Placeholder for edit movie logic (can be implemented later)
+        function editMovie(id) {
+            alert(`Edit functionality for Movie ID ${id} will be implemented later.`);
         }
+
+        // Initialize page
+        loadMovies();
     </script>
 @endsection
