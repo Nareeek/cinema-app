@@ -14,6 +14,10 @@ Route::view('/bookings/{id}', 'bookings.index')->where('id', '[0-9]+');
 
 Route::view('/schedules', 'schedules.index');
 
+Route::view('/payment', 'payment.index');
+
+Route::view('/bookings/success', 'bookings.success');
+
 // Admin Portal
 Route::view('/admin/schedules', 'admin.schedules.index');
 Route::view('/admin/rooms', 'admin.rooms.index');
