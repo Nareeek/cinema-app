@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SlideshowController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,6 +18,8 @@ Route::view('/schedules', 'schedules.index');
 Route::view('/payment', 'payment.index');
 
 Route::view('/bookings/success', 'bookings.success');
+
+Route::get('/api/slideshow-images', [SlideshowController::class, 'getSlideshowImages']);
 
 // Admin Portal
 Route::view('/admin/schedules', 'admin.schedules.index');
