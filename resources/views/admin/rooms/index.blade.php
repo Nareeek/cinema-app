@@ -4,110 +4,110 @@
 
 @section('content')
     <h1>Room Management</h1>
-    <button onclick="showRoomForm()">Add New Room</button>
-    <div id="room-form" style="display: none;">
-        <form id="room-form-data">
-            <input type="hidden" id="room-id">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required><br>
 
-            <label for="type">Type:</label>
-            <input type="text" id="type" name="type" required><br>
+    <!-- Add Room Form -->
+    <form id="add-room-form">
+        <h2>Add New Room</h2>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
 
-            <label for="description">Description:</label>
-            <textarea id="description" name="description"></textarea><br>
+        <label for="type">Type:</label>
+        <input type="text" id="type" name="type" required><br>
 
-            <label for="capacity">Capacity:</label>
-            <input type="number" id="capacity" name="capacity" required><br>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea><br>
 
-            <button type="submit">Save Room</button>
-            <button type="button" onclick="hideRoomForm()">Cancel</button>
-        </form>
-    </div>
-    <div id="rooms"></div>
+        <label for="capacity">Capacity:</label>
+        <input type="number" id="capacity" name="capacity" required><br>
+
+        <button type="submit">Add Room</button>
+    </form>
+
+    <!-- Rooms Table -->
+    <h2>Existing Rooms</h2>
+    <table id="rooms-table" border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Capacity</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
     <script>
-        // Fetch and display all rooms
-        function fetchRooms() {
+        // Fetch and display rooms
+        function loadRooms() {
             fetch('/api/admin/rooms')
                 .then(response => response.json())
                 .then(data => {
-                    const container = document.getElementById('rooms');
-                    container.innerHTML = ''; // Clear previous content
+                    const tableBody = document.querySelector('#rooms-table tbody');
+                    tableBody.innerHTML = ''; // Clear table
                     data.forEach(room => {
-                        const div = document.createElement('div');
-                        div.innerHTML = `
-                            <h2>${room.name}</h2>
-                            <p>Type: ${room.type}</p>
-                            <p>Description: ${room.description || 'No description'}</p>
-                            <p>Capacity: ${room.capacity}</p>
-                            <button onclick="editRoom(${room.id})">Edit</button>
-                            <button onclick="deleteRoom(${room.id})">Delete</button>
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${room.id}</td>
+                            <td>${room.name}</td>
+                            <td>${room.type}</td>
+                            <td>${room.description || 'N/A'}</td>
+                            <td>${room.capacity}</td>
+                            <td>
+                                <button onclick="deleteRoom(${room.id})">Delete</button>
+                                <button onclick="editRoom(${room.id})">Edit</button>
+                            </td>
                         `;
-                        container.appendChild(div);
+                        tableBody.appendChild(row);
                     });
                 });
         }
 
-        fetchRooms();
-
-        // Show the room form
-        function showRoomForm(room = null) {
-            const form = document.getElementById('room-form');
-            form.style.display = 'block';
-
-            // If editing, populate form fields
-            if (room) {
-                document.getElementById('room-id').value = room.id;
-                document.getElementById('name').value = room.name;
-                document.getElementById('type').value = room.type;
-                document.getElementById('description').value = room.description;
-                document.getElementById('capacity').value = room.capacity;
-            } else {
-                document.getElementById('room-form-data').reset();
-                document.getElementById('room-id').value = '';
-            }
-        }
-
-        // Hide the room form
-        function hideRoomForm() {
-            document.getElementById('room-form').style.display = 'none';
-        }
-
-        // Save (Create or Update) a room
-        document.getElementById('room-form-data').addEventListener('submit', function (e) {
+        // Handle form submission for adding a new room
+        document.getElementById('add-room-form').addEventListener('submit', function (e) {
             e.preventDefault();
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
-            const roomId = document.getElementById('room-id').value;
 
-            const method = roomId ? 'PUT' : 'POST';
-            const endpoint = roomId ? `/api/admin/rooms/${roomId}` : '/api/admin/rooms';
-
-            fetch(endpoint, {
-                method: method,
+            fetch('/api/admin/rooms', {
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
             })
-                .then(() => {
-                    fetchRooms(); // Refresh room list
-                    hideRoomForm();
+                .then(response => {
+                    if (response.ok) {
+                        alert('Room added successfully!');
+                        loadRooms(); // Refresh table
+                        this.reset(); // Reset form
+                    } else {
+                        alert('Failed to add room.');
+                    }
                 });
         });
 
-        // Edit a room
-        function editRoom(id) {
-            fetch(`/api/admin/rooms/${id}`)
-                .then(response => response.json())
-                .then(room => {
-                    showRoomForm(room);
+        // Delete a room
+        function deleteRoom(id) {
+            fetch(`/api/admin/rooms/${id}`, {
+                method: 'DELETE',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Room deleted successfully!');
+                        loadRooms(); // Refresh table
+                    } else {
+                        alert('Failed to delete room.');
+                    }
                 });
         }
 
-        // Delete a room
-        function deleteRoom(id) {
-            fetch(`/api/admin/rooms/${id}`, { method: 'DELETE' })
-                .then(() => fetchRooms());
+        // Placeholder for edit room logic (can be implemented later)
+        function editRoom(id) {
+            alert(`Edit functionality for Room ID ${id} will be implemented later.`);
         }
+
+        // Initialize page
+        loadRooms();
     </script>
 @endsection
