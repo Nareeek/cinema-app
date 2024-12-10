@@ -4,150 +4,112 @@
 
 @section('content')
     <h1>Schedule Management</h1>
-    <button onclick="showScheduleForm()">Add New Schedule</button>
-    <div id="schedule-form" style="display: none;">
-        <form id="schedule-form-data">
-            <input type="hidden" id="schedule-id">
-            <label for="room">Room:</label>
-            <select id="room" name="room_id"></select><br>
 
-            <label for="movie">Movie:</label>
-            <select id="movie" name="movie_id"></select><br>
+    <!-- Add Schedule Form -->
+    <form id="add-schedule-form">
+        <h2>Add New Schedule</h2>
+        <label for="room_id">Room ID:</label>
+        <input type="number" id="room_id" name="room_id" required><br>
 
-            <label for="schedule_time">Schedule Time:</label>
-            <input type="datetime-local" id="schedule_time" name="schedule_time"><br>
+        <label for="movie_id">Movie ID:</label>
+        <input type="number" id="movie_id" name="movie_id" required><br>
 
-            <label for="price">Price:</label>
-            <input type="number" id="price" name="price" step="0.01"><br>
+        <label for="schedule_time">Schedule Time:</label>
+        <input type="datetime-local" id="schedule_time" name="schedule_time" required><br>
 
-            <label for="status">Status:</label>
-            <select id="status" name="status">
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-            </select><br>
+        <label for="price">Price:</label>
+        <input type="number" step="0.01" id="price" name="price" required><br>
 
-            <button type="submit">Save Schedule</button>
-            <button type="button" onclick="hideScheduleForm()">Cancel</button>
-        </form>
-    </div>
-    <div id="schedules"></div>
+        <button type="submit">Add Schedule</button>
+    </form>
+
+    <!-- Schedules Table -->
+    <h2>Existing Schedules</h2>
+    <table id="schedules-table" border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Room</th>
+                <th>Movie</th>
+                <th>Time</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
     <script>
-        // Fetch and populate room and movie dropdowns
-        function populateDropdowns() {
-            fetch('/api/admin/rooms')
-                .then(response => response.json())
-                .then(data => {
-                    const roomSelect = document.getElementById('room');
-                    roomSelect.innerHTML = '';
-                    data.forEach(room => {
-                        const option = document.createElement('option');
-                        option.value = room.id;
-                        option.textContent = room.name;
-                        roomSelect.appendChild(option);
-                    });
-                });
-
-            fetch('/api/admin/movies')
-                .then(response => response.json())
-                .then(data => {
-                    const movieSelect = document.getElementById('movie');
-                    movieSelect.innerHTML = '';
-                    data.forEach(movie => {
-                        const option = document.createElement('option');
-                        option.value = movie.id;
-                        option.textContent = movie.title;
-                        movieSelect.appendChild(option);
-                    });
-                });
-        }
-
         // Fetch and display schedules
-        function fetchSchedules() {
+        function loadSchedules() {
             fetch('/api/admin/schedules')
                 .then(response => response.json())
                 .then(data => {
-                    const container = document.getElementById('schedules');
-                    container.innerHTML = ''; // Clear previous schedules
+                    const tableBody = document.querySelector('#schedules-table tbody');
+                    tableBody.innerHTML = ''; // Clear table
                     data.forEach(schedule => {
-                        const div = document.createElement('div');
-                        div.innerHTML = `
-                            <p>Movie: ${schedule.movie.title}</p>
-                            <p>Room: ${schedule.room.name}</p>
-                            <p>Time: ${schedule.schedule_time}</p>
-                            <p>Price: $${schedule.price}</p>
-                            <p>Status: ${schedule.status}</p>
-                            <button onclick="editSchedule(${schedule.id})">Edit</button>
-                            <button onclick="deleteSchedule(${schedule.id})">Delete</button>
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${schedule.id}</td>
+                            <td>${schedule.room_id}</td>
+                            <td>${schedule.movie_id}</td>
+                            <td>${new Date(schedule.schedule_time).toLocaleString()}</td>
+                            <td>$${schedule.price.toFixed(2)}</td>
+                            <td>${schedule.status}</td>
+                            <td>
+                                <button onclick="deleteSchedule(${schedule.id})">Delete</button>
+                                <button onclick="editSchedule(${schedule.id})">Edit</button>
+                            </td>
                         `;
-                        container.appendChild(div);
+                        tableBody.appendChild(row);
                     });
                 });
         }
 
-        fetchSchedules();
-
-        // Show the schedule form
-        function showScheduleForm(schedule = null) {
-            const form = document.getElementById('schedule-form');
-            form.style.display = 'block';
-
-            // Populate dropdowns
-            populateDropdowns();
-
-            // If editing, populate form fields
-            if (schedule) {
-                document.getElementById('schedule-id').value = schedule.id;
-                document.getElementById('room').value = schedule.room_id;
-                document.getElementById('movie').value = schedule.movie_id;
-                document.getElementById('schedule_time').value = schedule.schedule_time;
-                document.getElementById('price').value = schedule.price;
-                document.getElementById('status').value = schedule.status;
-            } else {
-                document.getElementById('schedule-form-data').reset();
-                document.getElementById('schedule-id').value = '';
-            }
-        }
-
-        // Hide the schedule form
-        function hideScheduleForm() {
-            document.getElementById('schedule-form').style.display = 'none';
-        }
-
-        // Save (Create or Update) a schedule
-        document.getElementById('schedule-form-data').addEventListener('submit', function (e) {
+        // Handle form submission for adding a new schedule
+        document.getElementById('add-schedule-form').addEventListener('submit', function (e) {
             e.preventDefault();
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
-            const scheduleId = document.getElementById('schedule-id').value;
 
-            const method = scheduleId ? 'PUT' : 'POST';
-            const endpoint = scheduleId ? `/api/admin/schedules/${scheduleId}` : '/api/admin/schedules';
-
-            fetch(endpoint, {
-                method: method,
+            fetch('/api/admin/schedules', {
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
             })
-                .then(() => {
-                    fetchSchedules(); // Refresh schedule list
-                    hideScheduleForm();
+                .then(response => {
+                    if (response.ok) {
+                        alert('Schedule added successfully!');
+                        loadSchedules(); // Refresh table
+                        this.reset(); // Reset form
+                    } else {
+                        alert('Failed to add schedule.');
+                    }
                 });
         });
 
-        // Edit a schedule
-        function editSchedule(id) {
-            fetch(`/api/admin/schedules/${id}`)
-                .then(response => response.json())
-                .then(schedule => {
-                    showScheduleForm(schedule);
+        // Delete a schedule
+        function deleteSchedule(id) {
+            fetch(`/api/admin/schedules/${id}`, {
+                method: 'DELETE',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Schedule deleted successfully!');
+                        loadSchedules(); // Refresh table
+                    } else {
+                        alert('Failed to delete schedule.');
+                    }
                 });
         }
 
-        // Delete a schedule
-        function deleteSchedule(id) {
-            fetch(`/api/admin/schedules/${id}`, { method: 'DELETE' })
-                .then(() => fetchSchedules());
+        // Placeholder for edit schedule logic (can be implemented later)
+        function editSchedule(id) {
+            alert(`Edit functionality for Schedule ID ${id} will be implemented later.`);
         }
+
+        // Initialize page
+        loadSchedules();
     </script>
 @endsection
