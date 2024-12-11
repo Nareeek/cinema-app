@@ -1,73 +1,80 @@
-// home.js
+const slideshow = document.querySelector('.slideshow');
+let isHovering = false;
+let slideInterval;
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Slideshow functionality
-    const slideshow = document.querySelector('.slideshow');
-    let slideIndex = 0;
-    let isHovering = false;
+// Function to switch slides
+function switchSlide() {
+    const slides = document.querySelectorAll('.slideshow .slide');
+    const slideWidth = slides[0].offsetWidth + 10; // Include gap in width
 
-    // Function to switch slides
-    function switchSlide() {
-        if (!isHovering) {
-            const slides = document.querySelectorAll('.slideshow .slide');
-            slides.forEach((slide, index) => {
-                slide.style.transform = `translateX(${(index - slideIndex) * 100}%)`;
-            });
-            slideIndex = (slideIndex + 1) % slides.length;
-        }
+    slideshow.scrollBy({ left: slideWidth, behavior: 'smooth' });
+
+    if (slideshow.scrollLeft + slideshow.offsetWidth >= slideshow.scrollWidth) {
+        slideshow.scrollTo({ left: 0, behavior: 'smooth' });
     }
+}
 
-    // Start the slideshow
-    function startSlideshow() {
-        setInterval(switchSlide, 3000);
-    }
-
-    // Stop slideshow on hover
-    slideshow.addEventListener('mouseenter', () => isHovering = true);
-    slideshow.addEventListener('mouseleave', () => isHovering = false);
-
-    // Make movie posters clickable
-    document.querySelectorAll('.slideshow .slide img').forEach(img => {
-        img.addEventListener('click', () => {
-            const movieId = img.dataset.movieId;
+document.querySelectorAll('.slideshow .slide img').forEach((img) => {
+    img.addEventListener('click', () => {
+        const movieId = img.dataset.movieId;
+        if (movieId) {
             window.location.href = `/movies/${movieId}`;
-        });
+        }
     });
-
-    startSlideshow();
-
-    // Show room schedule
-    function showRoomSchedule(roomId) {
-        fetch(`/rooms/${roomId}/schedule`)
-            .then(response => response.json())
-            .then(data => {
-                const scheduleContainer = document.getElementById('room-schedule');
-                scheduleContainer.innerHTML = `
-                    <h3>Schedule for Room: ${data.name}</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Movie</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${data.movies.map(movie => `
-                                <tr>
-                                    <td>${movie.title}</td>
-                                    <td>${movie.time}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                `;
-            })
-            .catch(error => console.error('Error fetching schedule:', error));
-    }
-
-    // Language switching functionality
-    function changeLanguage(lang) {
-        alert(`Language changed to: ${lang}`);
-        // Add further logic to update the interface language
-    }
 });
+
+// Start slideshow automatically
+function startSlideshow() {
+    slideInterval = setInterval(switchSlide, 3000);
+}
+
+// Pause slideshow when hovering
+slideshow.addEventListener('mouseenter', () => {
+    isHovering = true;
+    clearInterval(slideInterval);
+});
+
+slideshow.addEventListener('mouseleave', () => {
+    isHovering = false;
+    startSlideshow();
+});
+
+// Ensure movie posters are clickable
+document.querySelectorAll('.slideshow .slide img').forEach((img) => {
+    img.addEventListener('click', () => {
+        const movieId = img.dataset.movieId;
+        window.location.href = `/movies/${movieId}`;
+    });
+});
+
+startSlideshow();
+
+
+// Room schedule functionality
+function showRoomSchedule(roomElement) {
+    const roomId = roomElement.getAttribute('data-room-id');
+    fetch(`/rooms/${roomId}/schedule`)
+        .then(response => response.json())
+        .then(data => {
+            const scheduleContainer = document.getElementById('room-schedule');
+            scheduleContainer.innerHTML = `
+                <h3>Schedule for Room ${data.name}</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Movie</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.movies.map(movie => `
+                            <tr>
+                                <td>${movie.title}</td>
+                                <td>${movie.time}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        });
+}

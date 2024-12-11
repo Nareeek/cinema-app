@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SlideshowController;
+use App\Http\Controllers\Admin\RoomController;
 use App\Models\Movie;
 use App\Models\Room;
 
@@ -10,6 +11,8 @@ Route::get('/', function () {
     $rooms = Room::all(); // Fetch all rooms
     return view('welcome', compact('movies', 'rooms'));
 });
+
+Route::get('/rooms/{id}/schedule', [RoomController::class, 'schedule']);
 
 Route::view('/rooms', 'rooms.index');
 
