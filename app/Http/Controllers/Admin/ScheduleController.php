@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Schedule;
+use App\Models\Movie;
+use App\Models\Room;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -98,5 +100,19 @@ class ScheduleController extends Controller
         $schedule->delete();
 
         return response()->json(['message' => 'Schedule deleted successfully']);
+    }
+
+    public function getSchedule(Request $request, $roomId)
+    {
+        $day = $request->get('day', 'today');
+
+        $movies = Movie::where('room_id', $roomId)
+            ->whereDate('start_time', $day === 'today' ? now() : now()->addDay())
+            ->get(['id', 'title', 'start_time as time', 'price']);
+
+        return response()->json([
+            'name' => Room::find($roomId)->name,
+            'movies' => $movies
+        ]);
     }
 }

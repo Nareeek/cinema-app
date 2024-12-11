@@ -99,14 +99,12 @@ header .logo img {
 
 /* Room card styling */
 .room-card {
-    width: 200px;
-    height: 300px;
-    margin: 10px;
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
     cursor: pointer;
-    text-align: center;
-    border: 1px solid #ddd;
-    overflow: hidden;
-    transition: transform 0.2s;
+    transition: transform 0.2s ease;
 }
 
 .room-card img {
@@ -116,7 +114,7 @@ header .logo img {
 }
 
 .room-card:hover {
-    transform: scale(1.05); /* Add hover effect */
+    transform: scale(1.02);
 }
 
 .room-card img {
@@ -130,4 +128,41 @@ header .logo img {
 .room-card h3 {
     padding: 10px;
     font-size: 18px;
+}
+
+
+.schedule-section {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+.filter-section {
+    margin-bottom: 10px;
+}
+.filter-btn {
+    padding: 5px 10px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #e0e0e0;
+    cursor: pointer;
+}
+.filter-btn.active {
+    background-color: #007bff;
+    color: white;
+}
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.schedule-table th, .schedule-table td {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+.loading-text {
+    text-align: center;
+    font-style: italic;
 }
