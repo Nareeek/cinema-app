@@ -58,4 +58,25 @@ class RoomController extends Controller
         $room->delete();
         return response()->json(['message' => 'Room deleted successfully']);
     }
+
+    public function schedule($id)
+    {
+        // Attempt to find the room by ID and load its schedules and movies
+        $room = Room::with('schedules.movie')->find($id);
+    
+        if (!$room) {
+            return response()->json(['error' => 'Room not found'], 404);
+        }
+    
+        // Format the response
+        return response()->json([
+            'name' => $room->name,
+            'movies' => $room->schedules->map(function ($schedule) {
+                return [
+                    'title' => $schedule->movie->title ?? 'Unknown',
+                    'time' => optional($schedule->schedule_time)->format('Y-m-d H:i') ?? 'N/A',
+                ];
+            }),
+        ]);
+    }    
 }

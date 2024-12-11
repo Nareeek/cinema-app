@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Home | Cinema App')
+@section('title', 'Cinema App - Home')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/home.css') }}">
@@ -15,7 +15,7 @@
     <!-- Top Bar -->
     <div class="top-bar">
         <div class="logo">
-            <img src="{{ asset('images/logo.jpg') }}" alt="Cinema App Logo">
+            <img src="{{ asset('images/logo.jpg') }}" alt="Cinema App Logo", height="40", width="50">
         </div>
         <div class="language-selector">
             <button onclick="changeLanguage('en')">EN</button>
@@ -26,8 +26,11 @@
     <!-- Top Section: Movie Slideshow -->
     <div class="slideshow">
         @foreach($movies as $movie)
-            <div>
-                <img src="{{ asset('images/' . $movie->poster_url) }}" alt="{{ $movie->title }}" class="movie-image">
+            <div class="slide"> <!-- Add 'slide' class -->
+                <img src="{{ asset('images/' . $movie->poster_url) }}" 
+                    alt="{{ $movie->title }}" 
+                    class="movie-image" 
+                    data-movie-id="{{ $movie->id }}">
             </div>
         @endforeach
     </div>
@@ -35,18 +38,16 @@
     <!-- Middle Section: Rooms List -->
     <!-- Available Rooms Section -->
     <h2>Available Rooms</h2>
-    <div class="rooms-section">
+    <div class="room-container">
         @foreach($rooms as $room)
-            <div class="room-card" data-room-id="{{ $room->id }}" onclick="showRoomSchedule(this)">
-                <img src="{{ asset('images/' . $room->image_url) }}" alt="{{ $room->name }}" class="room-image">
-                <h3>{{ $room->name }}</h3>
-            </div>
+        <div class="room-card" data-room-id="{{ $room->id }}" onclick="showRoomSchedule(this)">
+            <img src="{{ $room->image_url ? asset('images/' . $room->image_url) : asset('images/default-room-image.jpg') }}" 
+                alt="{{ $room->name }}"
+                data-room-id="{{ $room->id }}">
+            <h3>{{ $room->name }}</h3>
+        </div>
         @endforeach
     </div>
-
-    <!-- Room Schedule Section -->
-    <div id="room-schedule" class="room-schedule">
-        <!-- Dynamic Room Schedule will be displayed here -->
-    </div>
+    <div id="room-schedule" style="margin-top: 20px;"></div>
 </div>
 @endsection

@@ -17,4 +17,9 @@ class Room extends Model
     {
         return $this->hasMany(Seat::class);
     }
+
+    public function movies()
+    {
+        return $this->hasManyThrough(Movie::class, Schedule::class);
+    }
 }
