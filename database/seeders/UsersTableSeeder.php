@@ -25,5 +25,23 @@ class UsersTableSeeder extends Seeder
             'email' => 'user@example.com',
             'password' => Hash::make('password'),
         ]);
+
+        User::create([
+            'name' => 'Random User',
+            'email' => 'random@example.com',
+            'password' => Hash::make('password'),
+        ]);
+
+        User::create([
+            'name' => 'Hacker',
+            'email' => 'hacker@example.com',
+            'password' => Hash::make('password'),
+        ]);
+
+        User::create([
+            'name' => 'VIP User',
+            'email' => 'vip@example.com',
+            'password' => Hash::make('password'),
+        ]);
     }
 }

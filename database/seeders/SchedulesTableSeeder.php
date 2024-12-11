@@ -22,11 +22,36 @@ class SchedulesTableSeeder extends Seeder
         ]);
 
         Schedule::create([
-            'room_id' => 2, // VIP Room
+            'room_id' => 2, // Blue Room
             'movie_id' => 2, // The Batman
             'schedule_time' => now()->addDays(1)->setTime(20, 0), // Tomorrow at 8 PM
             'price' => 24.99,
             'status' => 'Active',
         ]);
+
+        Schedule::create([
+            'room_id' => 2, // Blue Room
+            'movie_id' => 4, // The GodFather
+            'schedule_time' => now()->addDays(1)->setTime(10, 0), // Tomorrow at 10 AM
+            'price' => 12.90,
+            'status' => 'Active',
+        ]);
+
+        Schedule::create([
+            'room_id' => 3, // Green Room
+            'movie_id' => 3, // Home alone
+            'schedule_time' => now()->addDays(1)->setTime(16, 0), // Tomorrow at 4 PM
+            'price' => 16.29,
+            'status' => 'Active',
+        ]);
+
+        Schedule::create([
+            'room_id' => 4, // VIP Room
+            'movie_id' => 5, // Joker
+            'schedule_time' => now()->addDays(1)->setTime(23, 0), // Tomorrow at 11 PM
+            'price' => 20.78,
+            'status' => 'Active',
+        ]);
+
     }
 }

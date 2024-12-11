@@ -1,44 +1,52 @@
 @extends('layouts.app')
 
-@section('title', 'Welcome')
+@section('title', 'Home | Cinema App')
+
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/home.css') }}">
+@endpush
+
+@push('scripts')
+<script src="{{ asset('js/home.js') }}" defer></script>
+@endpush
 
 @section('content')
-    <h1>Welcome to Cinema App</h1>
+<div class="container">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="logo">
+            <img src="{{ asset('images/logo.jpg') }}" alt="Cinema App Logo">
+        </div>
+        <div class="language-selector">
+            <button onclick="changeLanguage('en')">EN</button>
+            <button onclick="changeLanguage('es')">ES</button>
+            <button onclick="changeLanguage('fr')">FR</button>
+        </div>
+    </div>
+    <!-- Top Section: Movie Slideshow -->
+    <div class="slideshow">
+        @foreach($movies as $movie)
+            <div>
+                <img src="{{ asset('images/' . $movie->poster_url) }}" alt="{{ $movie->title }}" class="movie-image">
+            </div>
+        @endforeach
+    </div>
+
+    <!-- Middle Section: Rooms List -->
+    <!-- Available Rooms Section -->
     <h2>Available Rooms</h2>
-    <div id="rooms"></div>
+    <div class="rooms-section">
+        @foreach($rooms as $room)
+            <div class="room-card" data-room-id="{{ $room->id }}" onclick="showRoomSchedule(this)">
+                <img src="{{ asset('images/' . $room->image_url) }}" alt="{{ $room->name }}" class="room-image">
+                <h3>{{ $room->name }}</h3>
+            </div>
+        @endforeach
+    </div>
 
-    <script>
-        fetch('/api/rooms')
-            .then(response => response.json())
-            .then(data => {
-                const container = document.getElementById('rooms');
-                data.forEach(room => {
-                    const div = document.createElement('div');
-                    div.innerHTML = `
-                        <h2>${room.name}</h2>
-                        <p>Type: ${room.type}</p>
-                        <p>${room.description || 'No description available.'}</p>
-                        <button onclick="viewSchedules(${room.id}, this)">View Schedules</button>
-                        <div class="schedules" style="display: none;"></div>
-                    `;
-                    container.appendChild(div);
-                });
-            });
-
-        function viewSchedules(roomId, button) {
-            const schedulesDiv = button.nextElementSibling;
-            if (schedulesDiv.style.display === 'none') {
-                fetch(`/api/rooms/${roomId}/schedules`)
-                    .then(response => response.json())
-                    .then(schedules => {
-                        schedulesDiv.innerHTML = schedules.map(schedule => `
-                            <p>Movie: ${schedule.movie.title} at ${schedule.schedule_time}</p>
-                        `).join('');
-                        schedulesDiv.style.display = 'block';
-                    });
-            } else {
-                schedulesDiv.style.display = 'none'; // Collapse if already open
-            }
-        }
-    </script>
+    <!-- Room Schedule Section -->
+    <div id="room-schedule" class="room-schedule">
+        <!-- Dynamic Room Schedule will be displayed here -->
+    </div>
+</div>
 @endsection

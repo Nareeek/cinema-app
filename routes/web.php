@@ -2,9 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SlideshowController;
+use App\Models\Movie;
+use App\Models\Room;
 
 Route::get('/', function () {
-    return view('welcome');
+    $movies = Movie::all();
+    $rooms = Room::all(); // Fetch all rooms
+    return view('welcome', compact('movies', 'rooms'));
 });
 
 Route::view('/rooms', 'rooms.index');
