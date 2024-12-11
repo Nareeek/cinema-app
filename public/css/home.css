@@ -166,3 +166,7 @@ header .logo img {
     text-align: center;
     font-style: italic;
 }
+
+.movie-image {
+    cursor: pointer; /* Ensures the pointer cursor appears on hover */
+}
