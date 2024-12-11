@@ -90,10 +90,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.filterSchedule = function(event, roomId, day) {
+        event.stopPropagation(); // Prevent the event from bubbling up
+    
         const buttons = event.target.parentElement.querySelectorAll('.filter-btn');
         buttons.forEach(button => button.classList.remove('active'));
         event.target.classList.add('active');
-
+    
         fetchSchedule(roomId, day);
     };
 
