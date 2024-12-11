@@ -78,3 +78,44 @@ function showRoomSchedule(roomElement) {
             `;
         });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    window.toggleSchedule = function(roomId) {
+        const section = document.getElementById(`schedule-${roomId}`);
+        section.style.display = section.style.display === 'none' ? 'block' : 'none';
+
+        if (section.style.display === 'block') {
+            fetchSchedule(roomId, 'today');
+        }
+    };
+
+    window.filterSchedule = function(event, roomId, day) {
+        const buttons = event.target.parentElement.querySelectorAll('.filter-btn');
+        buttons.forEach(button => button.classList.remove('active'));
+        event.target.classList.add('active');
+
+        fetchSchedule(roomId, day);
+    };
+
+    function fetchSchedule(roomId, day) {
+        const tbody = document.getElementById(`schedule-body-${roomId}`);
+        tbody.innerHTML = '<tr><td colspan="3" class="loading-text">Loading...</td></tr>';
+
+        fetch(`/rooms/${roomId}/schedule?day=${day}`)
+            .then(response => response.json())
+            .then(data => {
+                const rows = data.movies.map(movie => `
+                    <tr>
+                        <td>${movie.time || 'N/A'}</td>
+                        <td><a href="/booking/${movie.id}" class="movie-link">${movie.title}</a></td>
+                        <td>${movie.price || 'Free'}</td>
+                    </tr>
+                `).join('');
+                tbody.innerHTML = rows || '<tr><td colspan="3">No movies available.</td></tr>';
+            })
+            .catch(error => {
+                tbody.innerHTML = '<tr><td colspan="3" class="loading-text">Error loading schedule.</td></tr>';
+                console.error(error);
+            });
+    }
+});

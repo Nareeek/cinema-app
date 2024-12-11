@@ -39,12 +39,34 @@
     <!-- Available Rooms Section -->
     <h2>Available Rooms</h2>
     <div class="room-container">
-        @foreach($rooms as $room)
-        <div class="room-card" data-room-id="{{ $room->id }}" onclick="showRoomSchedule(this)">
+        @foreach ($rooms as $room)
+        <div class="room-card" onclick="toggleSchedule({{ $room->id }})">
             <img src="{{ $room->image_url ? asset('images/' . $room->image_url) : asset('images/default-room-image.jpg') }}" 
-                alt="{{ $room->name }}"
-                data-room-id="{{ $room->id }}">
+                alt="{{ $room->name }}">
             <h3>{{ $room->name }}</h3>
+
+            <!-- Collapsible Section for Schedule -->
+            <div id="schedule-{{ $room->id }}" class="schedule-section" style="display: none;">
+                <div class="filter-section">
+                    <button class="filter-btn active" onclick="filterSchedule(event, {{ $room->id }}, 'today')">Today</button>
+                    <button class="filter-btn" onclick="filterSchedule(event, {{ $room->id }}, 'tomorrow')">Tomorrow</button>
+                </div>
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Movie Name</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id="schedule-body-{{ $room->id }}">
+                        <!-- Placeholder content; dynamically updated with JavaScript -->
+                        <tr>
+                            <td colspan="3" class="loading-text">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         @endforeach
     </div>
