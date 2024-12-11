@@ -3,20 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title')</title>
+    <title>Cinema App - @yield('title', 'Home')</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    @stack('styles')
 </head>
 <body>
     <header>
         <nav>
-            <a href="/">Cinema App</a>
+            <ul>
+                <li><a href="/">Home</a></li>
+            </ul>
         </nav>
     </header>
+    
     <main>
         @yield('content')
     </main>
+    
     <footer>
-        <p>&copy; 2024 Cinema App</p>
+        <p>&copy; {{ date('Y') }} Cinema App. All rights reserved.</p>
     </footer>
+    
+    <script src="{{ asset('js/app.js') }}" defer></script>
+    @stack('scripts')
 </body>
 </html>

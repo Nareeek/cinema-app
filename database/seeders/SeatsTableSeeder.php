@@ -24,11 +24,33 @@ class SeatsTableSeeder extends Seeder
             }
         }
 
-        // Example: Add seats for Room 2 (VIP Room)
+        // Example: Add seats for Room 2 (Blue Room)
         for ($row = 1; $row <= 5; $row++) {
             for ($seat = 1; $seat <= 8; $seat++) {
                 Seat::create([
-                    'room_id' => 2, // Assuming Room 2 (VIP Room)
+                    'room_id' => 2,
+                    'row_number' => $row,
+                    'seat_number' => $seat,
+                ]);
+            }
+        }
+
+        // Example: Add seats for Room 3 (Green Room)
+        for ($row = 1; $row <= 5; $row++) {
+            for ($seat = 1; $seat <= 8; $seat++) {
+                Seat::create([
+                    'room_id' => 3,
+                    'row_number' => $row,
+                    'seat_number' => $seat,
+                ]);
+            }
+        }
+
+        // Example: Add seats for Room 4 (VIP Room)
+        for ($row = 1; $row <= 5; $row++) {
+            for ($seat = 1; $seat <= 8; $seat++) {
+                Seat::create([
+                    'room_id' => 4, // Assuming Room 4 (VIP Room)
                     'row_number' => $row,
                     'seat_number' => $seat,
                 ]);
