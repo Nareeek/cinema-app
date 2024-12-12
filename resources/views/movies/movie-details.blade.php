@@ -23,12 +23,15 @@
         </div>
     </div>
 
+    <!-- Hidden input for movie ID -->
+    <input type="hidden" id="movie-id" value="{{ $movie->id }}">
+
     <!-- Schedule Section -->
     <div class="schedule-section">
         <h2>Schedule</h2>
         <div class="filter-section">
-            <button class="filter-btn active" onclick="filterSchedule('today')">Today</button>
-            <button class="filter-btn" onclick="filterSchedule('tomorrow')">Tomorrow</button>
+            <button class="filter-btn active" data-day="today" onclick="filterSchedule('today')">Today</button>
+            <button class="filter-btn" data-day="tomorrow" onclick="filterSchedule('tomorrow')">Tomorrow</button>
         </div>
         <table class="schedule-table">
             <thead>

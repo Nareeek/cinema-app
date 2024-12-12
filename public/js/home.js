@@ -106,11 +106,12 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(`/rooms/${roomId}/schedule?day=${day}`)
             .then(response => response.json())
             .then(data => {
+                // alert(JSON.stringify(data, null, 2)); // Shows the entire response in a readable format
                 const rows = data.movies.map(movie => `
                     <tr>
                         <td>${movie.time || 'N/A'}</td>
                         <td><a href="/booking/${movie.id}" class="movie-link">${movie.title}</a></td>
-                        <td>${movie.price || 'Free'}</td>
+                        <td>${movie.price || 'N/A'}</td>
                     </tr>
                 `).join('');
                 tbody.innerHTML = rows || '<tr><td colspan="3">No movies available.</td></tr>';
