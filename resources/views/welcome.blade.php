@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Cinema App - Home')
+@section('title', 'Home')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/home.css') }}">
@@ -12,17 +12,6 @@
 
 @section('content')
 <div class="container">
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="logo">
-            <img src="{{ asset('images/logo.jpg') }}" alt="Cinema App Logo", height="40", width="50">
-        </div>
-        <div class="language-selector">
-            <button onclick="changeLanguage('en')">EN</button>
-            <button onclick="changeLanguage('es')">ES</button>
-            <button onclick="changeLanguage('fr')">FR</button>
-        </div>
-    </div>
     <!-- Top Section: Movie Slideshow -->
     <div class="slideshow">
         @foreach($movies as $movie)

@@ -10,10 +10,20 @@
 <body>
     <header>
         <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-            </ul>
+            <div class="logo">
+                <a href="/">
+                    <img src="{{ asset('images/logo.jpg') }}" alt="Cinema App Logo", height="40", width="50">
+                </a>
+            </div>
         </nav>
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="language-selector">
+                <button onclick="changeLanguage('en')">EN</button>
+                <button onclick="changeLanguage('ru')">RU</button>
+                <button onclick="changeLanguage('am')">AM</button>
+            </div>
+        </div>
     </header>
     
     <main>
@@ -21,7 +31,7 @@
     </main>
     
     <footer>
-        <div class="container111"><p>&copy; {{ date('Y') }} Cinema App. All rights reserved.</p></div>
+        <div class="rights"><p>&copy; {{ date('Y') }} Cinema App. All rights reserved.</p></div>
     </footer>
     
     <script src="{{ asset('js/app.js') }}" defer></script>

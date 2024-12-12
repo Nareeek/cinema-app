@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $movie->title . ' - Details')
+@section('title', $movie->title)
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/movie-details.css') }}">
