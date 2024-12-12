@@ -1,81 +1,79 @@
-const scheduleId = 1; // Replace with dynamic schedule ID
+document.addEventListener("DOMContentLoaded", () => {
+    const seatGrid = document.getElementById("seat-grid");
+    const summaryTable = document.getElementById("summary-table");
+    const totalPriceElement = document.getElementById("total-price");
+    const continueBtn = document.getElementById("continue-btn");
+    const emailInput = document.getElementById("email");
+    const phoneInput = document.getElementById("phone");
 
-// Fetch seat availability
-function loadSeats() {
-    fetch(`/api/schedules/${scheduleId}/seats`)
-        .then(response => response.json())
-        .then(data => renderSeatGrid(data));
-}
+    let selectedSeats = [];
+    let totalPrice = 0;
 
-// Render the seat grid
-function renderSeatGrid(seats) {
-    const seatGrid = document.getElementById('seat-grid');
-    seatGrid.innerHTML = '';
+    // Load seats (fetch from API)
+    function loadSeats() {
+        fetch(`/api/schedules/${scheduleId}/seats`)
+            .then(res => res.json())
+            .then(renderSeatGrid);
+    }
 
-    const rows = [...new Set(seats.map(seat => seat.row_number))];
-    rows.forEach(row => {
-        const rowDiv = document.createElement('div');
-        rowDiv.className = 'row';
+    // Render seat grid
+    function renderSeatGrid(seats) {
+        seatGrid.innerHTML = '';
+        seats.forEach(seat => {
+            const seatDiv = document.createElement("div");
+            seatDiv.textContent = `R${seat.row_number}-S${seat.seat_number}`;
+            seatDiv.className = `seat ${seat.is_booked ? "booked" : "available"}`;
+            seatDiv.addEventListener("click", () => toggleSeatSelection(seat));
+            seatGrid.appendChild(seatDiv);
+        });
+    }
 
-        seats.filter(seat => seat.row_number === row).forEach(seat => {
-            const seatButton = document.createElement('button');
-            seatButton.textContent = `R${seat.row_number}-S${seat.seat_number}`;
-            seatButton.className = seat.is_booked ? 'seat booked' : 'seat available';
-            seatButton.disabled = seat.is_booked;
+    // Toggle seat selection
+    function toggleSeatSelection(seat) {
+        if (seat.is_booked) return;
 
-            seatButton.addEventListener('click', () => toggleSeatSelection(seat));
-            rowDiv.appendChild(seatButton);
+        const isSelected = selectedSeats.find(s => s.id === seat.id);
+        if (isSelected) {
+            selectedSeats = selectedSeats.filter(s => s.id !== seat.id);
+            totalPrice -= seat.price;
+        } else {
+            selectedSeats.push(seat);
+            totalPrice += seat.price;
+        }
+
+        updateSummary();
+    }
+
+    // Update summary table
+    function updateSummary() {
+        summaryTable.innerHTML = '';
+        selectedSeats.forEach(seat => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${seat.row_number}</td>
+                <td>${seat.seat_number}</td>
+                <td>${seat.price}</td>
+                <td><button onclick="removeSeat(${seat.id})">X</button></td>
+            `;
+            summaryTable.appendChild(row);
         });
 
-        seatGrid.appendChild(rowDiv);
-    });
-}
-
-// Manage selected seats
-let selectedSeats = [];
-function toggleSeatSelection(seat) {
-    const seatIndex = selectedSeats.findIndex(s => s.id === seat.id);
-    if (seatIndex === -1) {
-        selectedSeats.push(seat);
-    } else {
-        selectedSeats.splice(seatIndex, 1);
+        totalPriceElement.textContent = totalPrice.toFixed(2);
+        validateForm();
     }
-    updateBookingSummary();
-}
 
-// Update booking summary
-function updateBookingSummary() {
-    const selectedSeatsList = selectedSeats.map(seat => `R${seat.row_number}-S${seat.seat_number}`);
-    document.getElementById('selected-seats').textContent = selectedSeatsList.join(', ');
+    // Form validation
+    function validateForm() {
+        continueBtn.disabled = !(
+            selectedSeats.length > 0 &&
+            emailInput.value &&
+            phoneInput.value
+        );
+    }
 
-    const totalPrice = selectedSeats.reduce((sum, seat) => sum + seat.price, 0);
-    document.getElementById('total-price').textContent = totalPrice.toFixed(2);
-}
+    emailInput.addEventListener("input", validateForm);
+    phoneInput.addEventListener("input", validateForm);
 
-// Confirm booking
-document.getElementById('confirm-booking').addEventListener('click', () => {
-    const bookings = selectedSeats.map(seat => ({
-        seat_id: seat.id,
-        user_email: 'test@example.com', // Replace with user input
-        user_phone: '1234567890', // Replace with user input
-        status: 'Pending',
-    }));
-
-    Promise.all(
-        bookings.map(booking =>
-            fetch(`/api/schedules/${scheduleId}/book`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(booking),
-            })
-        )
-    ).then(() => {
-        alert('Booking confirmed!');
-        loadSeats(); // Refresh seat grid
-        selectedSeats = [];
-        updateBookingSummary(); // Clear summary
-    });
+    // Load seats initially
+    loadSeats();
 });
-
-// Initialize page
-loadSeats();

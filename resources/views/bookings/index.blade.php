@@ -11,17 +11,48 @@
 @endpush
 
 @section('content')
-    <h1>Seat Booking</h1>
+<div class="booking-container">
+    <!-- Header -->
+    <div class="header">
+        <h1>Seat Selection</h1>
+        <div class="movie-details">
+            <p>Movie: <span id="movie-title">{{ $movie->title }}</span></p>
+            <p>Room: <span id="room-name">{{ $room->name }}</span></p>
+            <p>Date & Time: <span id="schedule-time">{{ $schedule->date_time }}</span></p>
+        </div>
+    </div>
 
     <!-- Seat Grid -->
-    <div id="seat-grid"></div>
+    <div id="seat-grid" class="seat-grid"></div>
 
     <!-- Booking Summary -->
-    <div id="booking-summary">
-        <h2>Booking Summary</h2>
-        <p>Selected Seats: <span id="selected-seats"></span></p>
+    <div id="booking-summary" class="summary">
+        <h2>Summary</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Row</th>
+                    <th>Seat</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="summary-table">
+                <!-- Dynamically generated rows will go here -->
+            </tbody>
+        </table>
         <p>Total Price: $<span id="total-price">0.00</span></p>
-        <button id="confirm-booking">Confirm Booking</button>
     </div>
-@endsection
 
+    <!-- User Information -->
+    <div class="user-info">
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" placeholder="Enter your phone number" required>
+    </div>
+
+    <!-- Continue Button -->
+    <button id="continue-btn" class="btn" disabled>Continue</button>
+</div>
+@endsection

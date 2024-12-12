@@ -1,27 +1,123 @@
-#seat-grid {
+/* Container */
+.booking-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+/* Header Section */
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.movie-details p {
+    margin: 5px 0;
+}
+
+/* Seat Grid */
+.seat-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
     gap: 10px;
-    margin: 20px 0;
+    margin-bottom: 20px;
+    justify-content: center;
 }
-.row {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 10px;
-}
+
 .seat {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 50px;
     cursor: pointer;
+    transition: background-color 0.2s;
 }
+
+.seat.available {
+    background-color: #90ee90; /* Green */
+}
+
 .seat.booked {
-    background-color: #ccc;
+    background-color: #f08080; /* Red */
     cursor: not-allowed;
 }
-.seat.available {
-    background-color: #90ee90;
+
+.seat.inactive {
+    background-color: #d3d3d3; /* Gray */
+    cursor: not-allowed;
 }
-#booking-summary {
+
+.seat:hover:not(.booked):not(.inactive) {
+    background-color: #76c776;
+}
+
+/* Summary Section */
+.summary {
     margin-top: 20px;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+}
+
+.summary table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.summary th, .summary td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.summary p {
+    text-align: right;
+    font-weight: bold;
+}
+
+/* User Info */
+.user-info {
+    margin-top: 20px;
+}
+
+.user-info label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.user-info input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Continue Button */
+.btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+.btn:hover:not(:disabled) {
+    background-color: #0056b3;
 }

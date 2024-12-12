@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SlideshowController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\MovieController;
+use App\Http\Controllers\BookingController;
 use App\Models\Movie;
 use App\Models\Room;
 
@@ -21,13 +22,15 @@ Route::view('/rooms', 'rooms.index');
 Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.details');
 Route::get('/movies/{id}/schedule', [MovieController::class, 'getSchedules']);
 
-Route::view('/bookings/{id}', 'bookings.index')->where('id', '[0-9]+');
+// Route::view('/bookings/{id}', 'bookings.index')->where('id', '[0-9]+');
 
 Route::view('/schedules', 'schedules.index');
 
 Route::view('/payment', 'payment.index');
 
 Route::view('/bookings/success', 'bookings.success');
+Route::get('/bookings/{id}', [BookingController::class, 'index'])->where('id', '[0-9]+');
+
 
 Route::get('/api/slideshow-images', [SlideshowController::class, 'getSlideshowImages']);
 
