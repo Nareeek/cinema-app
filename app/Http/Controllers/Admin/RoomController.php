@@ -74,7 +74,8 @@ class RoomController extends Controller
             'movies' => $room->schedules->map(function ($schedule) {
                 return [
                     'title' => $schedule->movie->title ?? 'Unknown',
-                    'time' => optional($schedule->schedule_time)->format('Y-m-d H:i') ?? 'N/A',
+                    'time' => $schedule->schedule_time ?? 'N/A',
+                    'price' => $schedule->price ?? 'N/A',
                 ];
             }),
         ]);

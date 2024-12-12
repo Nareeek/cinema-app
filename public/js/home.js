@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <tr>
                         <td>${movie.time || 'N/A'}</td>
                         <td><a href="/booking/${movie.id}" class="movie-link">${movie.title}</a></td>
-                        <td>${movie.price || 'N/A'}</td>
+                        <td>${movie.price + "$" || 'N/A'}</td>
                     </tr>
                 `).join('');
                 tbody.innerHTML = rows || '<tr><td colspan="3">No movies available.</td></tr>';

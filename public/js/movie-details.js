@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // alert(JSON.stringify(data, null, 2)); // Shows the entire response in a readable format
                 const rows = data.schedules.map(schedule => `
                     <tr>
-                        <td>${schedule.time || 'N/AAAAAAAAAAA'}</td>
+                        <td>${schedule.time || 'N/A'}</td>
                         <td>${schedule.room || 'N/A'}</td>
-                        <td>${schedule.price || 'N/A'}</td>
+                        <td>${schedule.price + "$" || 'N/A'}</td>
                         <td>
                             <button class="action-btn book-btn" onclick="window.location.href='/booking/${schedule.id}'">Book</button>
                         </td>
