@@ -21,7 +21,7 @@
     </main>
     
     <footer>
-        <p>&copy; {{ date('Y') }} Cinema App. All rights reserved.</p>
+        <div class="container111"><p>&copy; {{ date('Y') }} Cinema App. All rights reserved.</p></div>
     </footer>
     
     <script src="{{ asset('js/app.js') }}" defer></script>

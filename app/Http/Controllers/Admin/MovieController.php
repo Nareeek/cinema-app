@@ -48,7 +48,7 @@ class MovieController extends Controller
             'schedules' => $schedules->map(function ($schedule) {
                 return [
                     'id' => $schedule->id,
-                    'time' => $schedule->schedule_time,
+                    'time' => $schedule->schedule_time ?? 'N/A',
                     'room' => $schedule->room->name ?? 'N/A',
                     'price' => $schedule->price,
                 ];
