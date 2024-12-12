@@ -33,7 +33,27 @@ class MovieController extends Controller
     public function show($id)
     {
         $movie = Movie::findOrFail($id);
-        return response()->json($movie);
+        return view('movies.movie-details', compact('movie'));
+    }
+
+    public function getSchedules($id, Request $request)
+    {
+        $day = $request->query('day', 'today');
+        $movie = Movie::findOrFail($id);
+        $schedules = $movie->schedules()
+            ->whereDate('show_date', $day === 'today' ? now() : now()->addDay())
+            ->get();
+
+        return response()->json([
+            'schedules' => $schedules->map(function ($schedule) {
+                return [
+                    'id' => $schedule->id,
+                    'time' => $schedule->schedule_time,
+                    'room' => $schedule->room->name ?? 'N/A',
+                    'price' => $schedule->price,
+                ];
+            }),
+        ]);
     }
 
     // Update a movie
