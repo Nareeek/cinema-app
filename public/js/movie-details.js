@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td>${schedule.room || 'N/A'}</td>
                         <td>${schedule.price + "$" || 'N/A'}</td>
                         <td>
-                            <button class="action-btn book-btn" onclick="window.location.href='/booking/${schedule.id}'">Book</button>
+                            <button class="action-btn book-btn" onclick="window.location.href='/bookings/${schedule.id}'">Book</button>
                         </td>
                     </tr>
                 `).join('');
