@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const rows = data.movies.map(movie => `
                     <tr>
                         <td>${movie.time || 'N/A'}</td>
-                        <td><a href="/booking/${movie.id}" class="movie-link">${movie.title}</a></td>
+                        <td><a href="/bookings/${movie.id}" class="movie-link">${movie.title}</a></td>
                         <td>${movie.price + "$" || 'N/A'}</td>
                     </tr>
                 `).join('');
