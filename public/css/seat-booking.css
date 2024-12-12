@@ -55,8 +55,14 @@
     cursor: not-allowed;
 }
 
-.seat:hover:not(.booked):not(.inactive) {
+.seat.selected {
+    background-color: #ffc107; /* Yellow */
+    border: 2px solid #ff9800;
+}
+
+.seat:hover:not(.booked):not(.inactive):not(.selected) {
     background-color: #76c776;
+    border: 1px solid #5aaf5a;
 }
 
 /* Summary Section */

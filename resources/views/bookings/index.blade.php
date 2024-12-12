@@ -8,6 +8,10 @@
 
 @push('scripts')
 <script src="{{ asset('js/seat-booking.js') }}" defer></script>
+<script>
+    // Pass scheduleId from the backend to the frontend
+    const scheduleId = {{ $schedule->id }};
+</script>
 @endpush
 
 @section('content')
@@ -18,7 +22,8 @@
         <div class="movie-details">
             <p>Movie: <span id="movie-title">{{ $movie->title }}</span></p>
             <p>Room: <span id="room-name">{{ $room->name }}</span></p>
-            <p>Date & Time: <span id="schedule-time">{{ $schedule->date_time }}</span></p>
+            <p>Date & Time: <span id="schedule-time">{{ $schedule->schedule_time }}</span></p>
+            <!-- <p>Date & Time: <span id="schedule-time">{{ \Carbon\Carbon::parse($schedule->date_time)->format('M d, Y h:i A') }}</span></p> -->
         </div>
     </div>
 
@@ -34,7 +39,7 @@
                     <th>Row</th>
                     <th>Seat</th>
                     <th>Price</th>
-                    <th>Action</th>
+                    <th>Clear</th>
                 </tr>
             </thead>
             <tbody id="summary-table">
