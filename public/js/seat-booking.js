@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const maxSeats = Math.max(...seatsData.map(seat => seat.seat_number));
 
+        // Render seat numbers in header
         for (let i = 1; i <= maxSeats; i++) {
             const seatNumberHeader = document.createElement("div");
             seatNumberHeader.textContent = i;
@@ -35,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
             seatHeader.appendChild(seatNumberHeader);
         }
 
+        // Group seats by rows
         const rows = {};
         seatsData.forEach(seat => {
             if (!rows[seat.row_number]) {
@@ -43,10 +45,12 @@ document.addEventListener("DOMContentLoaded", () => {
             rows[seat.row_number].push(seat);
         });
 
+        // Render rows and seats
         Object.keys(rows).forEach(rowNumber => {
             const row = document.createElement("div");
             row.className = "seat-row";
 
+            // Add row number
             const rowNumberDiv = document.createElement("div");
             rowNumberDiv.className = "row-number";
             rowNumberDiv.textContent = `Row ${rowNumber}`;
@@ -71,15 +75,18 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Toggle seat selection
     function toggleSeatSelection(seatDiv) {
         const seatId = seatDiv.dataset.id;
         const price = parseFloat(seatDiv.dataset.price) || 0;
 
         if (seatDiv.classList.contains("selected")) {
+            // Deselect seat
             seatDiv.classList.remove("selected");
             selectedSeats = selectedSeats.filter(seat => seat.id != seatId);
             totalPrice -= price;
         } else {
+            // Select seat
             seatDiv.classList.add("selected");
             selectedSeats.push({
                 id: seatId,
@@ -91,8 +98,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         updateSummary();
+        validateForm(); // Validate form on seat selection
     }
 
+    // Update booking summary
     function updateSummary() {
         summaryTable.innerHTML = '';
         let newTotal = 0;
@@ -113,6 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
         totalPrice = newTotal;
         totalPriceElement.textContent = totalPrice.toFixed(2);
 
+        // Add remove seat functionality
         document.querySelectorAll(".remove-seat-btn").forEach(button => {
             button.addEventListener("click", () => {
                 const seatId = button.dataset.id;
@@ -121,6 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Remove seat from selection
     function removeSeat(seatId) {
         const seat = selectedSeats.find(seat => String(seat.id) === String(seatId));
 
@@ -134,22 +145,76 @@ document.addEventListener("DOMContentLoaded", () => {
             totalPrice -= seat.price;
 
             updateSummary();
+            validateForm(); // Validate form on seat removal
         }
-        // else {
-        //     console.warn(`Seat with ID ${seatId} not found in selectedSeats.`);
-        // }
     }
 
+    // Show popup alert
+    function showPopup(message) {
+        const popup = document.createElement("div");
+        popup.className = "popup";
+        popup.textContent = message;
+
+        document.body.appendChild(popup);
+
+        // Remove popup after 3 seconds
+        setTimeout(() => {
+            popup.remove();
+        }, 3000);
+    }
+
+    // Validate form inputs
     function validateForm() {
-        continueBtn.disabled = !(
-            selectedSeats.length > 0 &&
-            emailInput.value.trim() !== "" &&
-            phoneInput.value.trim() !== ""
-        );
+        const email = emailInput.value.trim();
+        const phone = phoneInput.value.trim();
+
+        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        const isValidPhone = /^\d{10,15}$/.test(phone);
+
+        // Enable the button only if all conditions are met
+        continueBtn.disabled = !(selectedSeats.length > 0 && isValidEmail && isValidPhone);
     }
 
+    // Handle continue button click
+    continueBtn.addEventListener("click", () => {
+        const email = emailInput.value.trim();
+        const phone = phoneInput.value.trim();
+
+        if (!email || !phone) {
+            showPopup("Please fill in both email and phone fields.");
+            return;
+        }
+
+        if (!validateEmail(email)) {
+            showPopup("Please enter a valid email address.");
+            return;
+        }
+
+        if (!validatePhone(phone)) {
+            showPopup("Please enter a valid phone number.");
+            return;
+        }
+
+        // Redirect to payment page if valid
+        window.location.href = "/payment";
+    });
+
+    // Email validation
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    // Phone validation
+    function validatePhone(phone) {
+        const phoneRegex = /^\d{10,15}$/; // Only digits, 10-15 characters
+        return phoneRegex.test(phone);
+    }
+
+    // Attach input listeners for validation
     emailInput.addEventListener("input", validateForm);
     phoneInput.addEventListener("input", validateForm);
 
+    // Initialize page
     loadSeats();
 });

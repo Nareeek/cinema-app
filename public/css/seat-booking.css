@@ -361,15 +361,45 @@
 
     .seat-header div,
     .seat {
-        width: 30px;
-        height: 30px;
-        line-height: 30px;
+        width: 40px; /* Slightly larger for small screens */
+        height: 40px;
+        line-height: 40px;
         font-size: 12px;
+        margin: 0 4px; /* Maintain spacing between seats */
     }
 
     .row-number {
         font-size: 14px;
-        width: 30px;
-        line-height: 30px;
+        width: 50px; /* Maintain consistent row number size */
+        line-height: 40px;
+    }
+
+    .seat-grid {
+        gap: 8px; /* Adjust row spacing */
     }
 }
+
+/* Popup for validation errors */
+.popup {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #f44336; /* Red for errors */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    animation: fadeInOut 3s ease-in-out;
+}
+
+/* Popup fade-in and fade-out animation */
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+}   
