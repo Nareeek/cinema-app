@@ -5,6 +5,7 @@ use App\Http\Controllers\SlideshowController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\MovieController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\PaymentController;
 use App\Models\Movie;
 use App\Models\Room;
 
@@ -26,7 +27,9 @@ Route::get('/movies/{id}/schedule', [MovieController::class, 'getSchedules']);
 
 Route::view('/schedules', 'schedules.index');
 
-Route::view('/payment', 'payment.index');
+Route::get('/payment', [PaymentController::class, 'paymentPage'])->name('payment.page');
+// Route::get('/payment', [PaymentController::class, 'paymentPage'])->name('payment');
+Route::post('/api/confirm-booking', [BookingController::class, 'confirmBooking']);
 
 Route::view('/bookings/success', 'bookings.success');
 Route::get('/bookings/{id}', [BookingController::class, 'index'])->where('id', '[0-9]+');

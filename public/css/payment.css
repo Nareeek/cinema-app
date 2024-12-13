@@ -1,6 +1,114 @@
-#payment-methods {
-    margin-top: 20px;
+/* Unified Card for Payment Page */
+.payment-container {
+    max-width: 300px; /* Reduced width to half the previous size */
+    margin: 50px auto; /* Center horizontally */
+    text-align: center;
+    padding: 15px; /* Adjusted padding for compact spacing */
+    background-color: #f9f9f9; /* Light gray background */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    font-family: Arial, sans-serif; /* Clean font */
 }
-#payment-form {
-    margin-top: 10px;
+
+/* Title Styling */
+.payment-title {
+    font-size: 18px; /* Decreased font size */
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px; /* Reduced margin */
+}
+
+/* Booking Summary Section */
+.summary-section {
+    margin-bottom: 15px; /* Reduced spacing */
+    text-align: center;
+}
+
+.summary-section h2 {
+    font-size: 16px; /* Reduced font size */
+    color: #444;
+    margin-bottom: 8px;
+}
+
+.summary-section p {
+    font-size: 14px; /* Reduced font size */
+    color: #555;
+    margin: 4px 0; /* Reduced spacing */
+}
+
+/* Payment Methods Section */
+.payment-methods-section {
+    margin-top: 15px; /* Reduced spacing */
+}
+
+.payment-method {
+    display: block;
+    width: 100%; /* Fill container width */
+    padding: 8px; /* Reduced padding */
+    font-size: 14px; /* Smaller font size */
+    color: #333;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 8px; /* Rounded corners */
+    background-color: #ffffff; /* White background */
+    cursor: pointer;
+    margin-bottom: 8px; /* Reduced margin */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.payment-method:hover {
+    background-color: #f0f0f0; /* Light hover effect */
+    transform: scale(1.02);
+}
+
+.payment-method.selected {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+/* Confirm Payment Button */
+.confirm-btn {
+    width: 100%; /* Stretch across container */
+    padding: 10px; /* Adjusted padding */
+    font-size: 14px; /* Reduced font size */
+    font-weight: bold;
+    color: white;
+    background-color: #28a745; /* Green for confirm button */
+    border: none;
+    border-radius: 8px;
+    margin-top: 15px; /* Adjusted margin */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.confirm-btn:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+.confirm-btn:hover:enabled {
+    background-color: #218838; /* Slightly darker green on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .payment-container {
+        max-width: 90%; /* Adjust container width for smaller screens */
+        padding: 10px;
+    }
+
+    .payment-title {
+        font-size: 16px; /* Adjust title font size for smaller screens */
+    }
+
+    .payment-method {
+        font-size: 12px; /* Reduced font for methods on smaller screens */
+        padding: 6px;
+    }
+
+    .confirm-btn {
+        font-size: 12px;
+        padding: 8px;
+    }
 }

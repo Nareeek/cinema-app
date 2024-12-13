@@ -265,10 +265,11 @@
     height: 40px;
     border-radius: 50%; /* Circular seats */
     background-color: #90ee90;
-    border: 4px solid #76c776;
+    border: 2px solid #76c776;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
     margin: 0 5px; /* Add horizontal spacing between seats */
+    transform: none;
 }
 
 .seat:hover {

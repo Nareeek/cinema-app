@@ -195,8 +195,15 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Redirect to payment page if valid
-        window.location.href = "/payment";
+        if (selectedSeats.length > 0 && email && phone) {
+            // Redirect to payment page with seat data
+            const queryParams = new URLSearchParams({
+                selected_seats: JSON.stringify(selectedSeats.map(seat => seat.seat)),
+                total_price: totalPrice
+            }).toString();
+
+            window.location.href = `/payment?${queryParams}`;
+        }
     });
 
     // Email validation

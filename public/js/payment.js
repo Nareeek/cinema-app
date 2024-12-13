@@ -1,18 +1,55 @@
-// Mock Data: Replace with actual booking details
-const selectedSeats = ['R1-S1', 'R1-S2'];
-const totalPrice = 20.00;
+document.addEventListener("DOMContentLoaded", () => {
+    // Retrieve data from the payment container
+    const paymentContainer = document.getElementById('payment-container');
+    const confirmPaymentBtn = document.getElementById('confirm-payment-btn');
+    const seatsElement = document.getElementById('selected-seats');
+    const totalPriceElement = document.getElementById('total-price');
 
-// Populate booking summary
-document.getElementById('selected-seats').textContent = selectedSeats.join(', ');
-document.getElementById('total-price').textContent = totalPrice.toFixed(2);
+    // Initialize payment variables
+    let selectedSeats = [];
+    let totalPrice = 0;
+    let selectedMethod = null;
 
-// Handle Payment Submission
-document.getElementById('payment-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const formData = new FormData(this);
-    const paymentMethod = formData.get('payment_method');
+    // Parse data attributes
+    try {
+        selectedSeats = JSON.parse(paymentContainer.dataset.selectedSeats || '[]');
+        totalPrice = parseFloat(paymentContainer.dataset.totalPrice || '0');
+    } catch (error) {
+        console.error("Error parsing selectedSeats or totalPrice:", error);
+    }
 
-    // Simulate payment processing
-    alert(`Payment successful using ${paymentMethod}!`);
-    window.location.href = '/bookings/success'; // Redirect to success page
+    // Populate booking summary
+    const formattedSeats = Array.isArray(selectedSeats) && selectedSeats.length
+        ? selectedSeats.map(seat => `Row ${seat.row}, Seat ${seat.number}`).join(', ')
+        : "No seats selected.";
+    seatsElement.textContent = formattedSeats;
+    totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
+
+    // Handle payment method selection
+    const paymentMethods = document.querySelectorAll('.payment-method');
+    paymentMethods.forEach(method => {
+        method.addEventListener('click', () => {
+            // Deselect all methods
+            paymentMethods.forEach(m => m.classList.remove('selected'));
+
+            // Select the clicked method
+            method.classList.add('selected');
+            selectedMethod = method.dataset.method;
+
+            // Enable the confirm button
+            confirmPaymentBtn.disabled = false;
+        });
+    });
+
+    // Handle payment confirmation
+    confirmPaymentBtn.addEventListener('click', () => {
+        if (!selectedMethod) {
+            console.error("Error: No payment method selected.");
+            return;
+        }
+
+        console.log(`Payment method selected: ${selectedMethod}`);
+        // Redirect to success page (simulate payment processing)
+        window.location.href = '/bookings/success';
+    });
 });

@@ -11,32 +11,23 @@
 @endpush
 
 @section('content')
-    <h1>Payment Page</h1>
-
-    <!-- Booking Summary -->
-    <div id="booking-summary">
-        <h2>Booking Summary</h2>
-        <p>Selected Seats: <span id="selected-seats"></span></p>
-        <p>Total Price: $<span id="total-price">0.00</span></p>
+<div id="payment-container"
+     data-selected-seats="{{ json_encode($selectedSeats ?? []) }}"
+     data-total-price="{{ $totalPrice ?? 0 }}">
+    <div class="payment-container">
+        <h1 class="payment-title">Complete Your Payment</h1>
+        <div id="booking-summary" class="summary-section">
+            <h2>Booking Summary</h2>
+            <p><strong>Selected Seats:</strong> <span id="selected-seats">Loading...</span></p>
+            <p><strong>Total Price:</strong> <span id="total-price">0.00</span></p>
+        </div>
+        <div id="payment-methods" class="payment-methods-section">
+            <h2>Select Payment Method</h2>
+            <div class="payment-method" data-method="credit_card">Credit Card</div>
+            <div class="payment-method" data-method="paypal">PayPal</div>
+            <div class="payment-method" data-method="cash">Cash</div>
+        </div>
+        <button id="confirm-payment-btn" class="confirm-btn" disabled>Confirm Payment</button>
     </div>
-
-    <!-- Payment Methods -->
-    <div id="payment-methods">
-        <h2>Select Payment Method</h2>
-        <form id="payment-form">
-            <label>
-                <input type="radio" name="payment_method" value="credit_card" required>
-                Credit Card
-            </label><br>
-            <label>
-                <input type="radio" name="payment_method" value="paypal">
-                PayPal
-            </label><br>
-            <label>
-                <input type="radio" name="payment_method" value="cash">
-                Cash
-            </label><br>
-            <button type="submit">Confirm Payment</button>
-        </form>
-    </div>
+</div>
 @endsection
