@@ -63,6 +63,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
                 if (!seat.is_booked) {
                     seatDiv.addEventListener("click", () => toggleSeatSelection(seatDiv));
+                } else {
+                    seatDiv.title = "This seat is already booked"; // Optional tooltip
                 }
     
                 row.appendChild(seatDiv);

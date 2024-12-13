@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\MovieController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SeatController;
 use App\Models\Movie;
 use App\Models\Room;
 
@@ -26,6 +27,7 @@ Route::get('/movies/{id}/schedule', [MovieController::class, 'getSchedules']);
 // Route::view('/bookings/{id}', 'bookings.index')->where('id', '[0-9]+');
 
 Route::view('/schedules', 'schedules.index');
+Route::get('/schedules/{scheduleId}/seats', [SeatController::class, 'getSeatAvailability']);
 
 Route::get('/payment', [PaymentController::class, 'paymentPage'])->name('payment.page');
 // Route::get('/payment', [PaymentController::class, 'paymentPage'])->name('payment');
