@@ -193,8 +193,8 @@
     justify-content: flex-start; /* Align with seats */
     align-items: center;
     margin-bottom: 10px;
-    gap: 10px; /* Add spacing between seat numbers */
-    padding-left: 60px; /* Align with row numbers */
+    padding-left: 126px;
+    gap: 23px; /* Add spacing between seat numbers */
 }
 
 .seat-header-number {
@@ -206,13 +206,13 @@
     font-weight: bold;
     color: #555;
     background-color: #f0f0f0;
-    border-radius: 5px;
+    border-radius: 50px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Seat Header (Numbers at the Top) */
 .seat-header div {
-    width: 50px; /* Match seat width */
+    width: 40px; /* Match seat width */
     height: 40px;
     text-align: center;
     line-height: 40px; /* Align with seat height */
@@ -261,11 +261,11 @@
 
 /* Individual Seat */
 .seat {
-    width: 50px; /* Larger seat size */
-    height: 50px;
+    width: 40px; /* Larger seat size */
+    height: 40px;
     border-radius: 50%; /* Circular seats */
     background-color: #90ee90;
-    border: 2px solid #76c776;
+    border: 4px solid #76c776;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
     margin: 0 5px; /* Add horizontal spacing between seats */

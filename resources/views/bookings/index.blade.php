@@ -40,7 +40,7 @@
                     <th>Row</th>
                     <th>Seat</th>
                     <th>Price</th>
-                    <th>Action</th>
+                    <th>Clear</th>
                 </tr>
             </thead>
             <tbody id="summary-table"></tbody>
