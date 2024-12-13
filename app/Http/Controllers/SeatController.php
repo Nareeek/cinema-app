@@ -20,7 +20,7 @@ class SeatController extends Controller
     
         $seats->each(function ($seat) use ($bookedSeats) {
             $seat->is_booked = in_array($seat->id, $bookedSeats);
-            $seat->price = $seat->price; // Ensure price is included
+            $seat->price = $seat->price; // Include the price
         });
     
         return response()->json($seats);
