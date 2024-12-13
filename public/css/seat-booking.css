@@ -1,0 +1,405 @@
+/* Global Container */
+.container {
+    max-width: 800px; /* Set a common width */
+    margin: 0 auto; /* Center the container horizontally */
+    padding: 10px; /* Add padding */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Spacing between sections */
+}
+
+/* Compact Info Header */
+.info-header {
+    width: 100%;
+    padding: 10px 15px; /* Reduced padding */
+    background-color: #f5f5f5; /* Light gray for a minimalistic look */
+    color: #333; /* Darker text for better contrast */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+    font-size: 14px; /* Compact font size */
+}
+
+/* Header Row Style */
+.info-row {
+    display: flex;
+    justify-content: space-between; /* Spread items evenly */
+    width: 100%;
+    max-width: 800px; /* Limit width for compact layout */
+}
+
+.info-row span {
+    flex: 1; /* Equal spacing */
+    text-align: center; /* Center-align the text */
+    font-size: 14px; /* Smaller font */
+    color: #555; /* Subtle dark gray */
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+.movie-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.movie-details {
+    margin: 10px 0 0;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #e0e0e0;
+}
+
+.movie-details span {
+    display: block;
+    margin-top: 5px;
+}
+
+.movie-room {
+    font-weight: bold;
+}
+
+.movie-datetime {
+    font-style: italic;
+}
+
+.seat.available {
+    background-color: #90ee90; /* Green */
+}
+
+.seat.selected {
+    background-color: #ffc107; /* Yellow */
+    border: 2px solid #ff9800;
+}
+
+/* Booking Summary Table */
+.summary-section table {
+    width: 100%;
+    border-collapse: collapse; /* Combine borders */
+    border: 1px solid #ddd; /* Add a border around the table */
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: left;
+}
+
+.summary-section th,
+.summary-section td {
+    padding: 8px 10px; /* Add spacing inside cells */
+    border: 1px solid #ddd; /* Add borders for cells */
+}
+
+.summary-section th {
+    font-weight: bold;
+    background-color: #f0f0f0; /* Subtle background for headers */
+}
+
+.summary-section td {
+    color: #555;
+}
+
+.summary-section tr:hover {
+    background-color: #f9f9f9; /* Highlight row on hover */
+}
+
+#total-price {
+    font-weight: bold;
+    color: #333;
+}
+
+/* User Info */
+.user-info {
+    margin-top: 20px;
+}
+
+.user-info label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.user-info input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Continue Button */
+.btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+.btn:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+/* Remove Seat Button Styling */
+.remove-seat-btn {
+    background-color: #f44336; /* Red background */
+    color: white; /* White text */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 5px 10px; /* Button padding */
+    cursor: pointer; /* Pointer cursor to indicate clickability */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover and click effect */
+}
+
+/* Hover Effect */
+.remove-seat-btn:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+    transform: scale(1.1); /* Slightly increase size on hover */
+}
+
+/* Active (Click) Effect */
+.remove-seat-btn:active {
+    background-color: #b71c1c; /* Even darker red when clicked */
+    transform: scale(0.95); /* Slightly shrink when clicked */
+}
+
+/* Container for the entire seats view */
+.seat-container {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Seat Header (Numbers at the Top) */
+.seat-header {
+    display: flex;
+    justify-content: flex-start; /* Align with seats */
+    align-items: center;
+    margin-bottom: 10px;
+    padding-left: 126px;
+    gap: 23px; /* Add spacing between seat numbers */
+}
+
+.seat-header-number {
+    width: 50px; /* Match seat width */
+    height: 40px;
+    text-align: center;
+    line-height: 40px; /* Vertically center the number */
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+    background-color: #f0f0f0;
+    border-radius: 50px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Seat Header (Numbers at the Top) */
+.seat-header div {
+    width: 40px; /* Match seat width */
+    height: 40px;
+    text-align: center;
+    line-height: 40px; /* Align with seat height */
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Rows Container */
+.seat-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Spacing between rows */
+    width: 100%;
+}
+
+/* Row Container */
+.seat-row {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Match seat margin */
+    margin-left: 60px; /* Adjust row alignment */
+}
+
+/* Row Number */
+.row-number {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+    margin-right: 10px;
+    width: 60px; /* Fixed width to align all rows, including Row 10 */
+    text-align: center;
+    line-height: 50px; /* Align vertically with seats */
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+/* Row Label Hover Effect (Make Non-Clickable) */
+.row-number:hover {
+    color: #007bff; /* Blue color on hover */
+    text-decoration: none; /* Remove underline */
+    cursor: default; /* No pointer cursor */
+}
+
+/* Individual Seat */
+.seat {
+    width: 40px; /* Larger seat size */
+    height: 40px;
+    border-radius: 50%; /* Circular seats */
+    background-color: #90ee90;
+    border: 4px solid #76c776;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 0 5px; /* Add horizontal spacing between seats */
+}
+
+.seat:hover {
+    background-color: #76c776; /* Darker green on hover */
+    transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+.seat:hover:not(.booked):not(.inactive):not(.selected) {
+    background-color: #76c776;
+    border: 1px solid #5aaf5a;
+}
+
+/* Booked Seats */
+.seat.booked {
+    background-color: #f08080; /* Red for booked */
+    border-color: #d32f2f;
+    cursor: not-allowed;
+}
+
+.seat.inactive {
+    background-color: #d3d3d3; /* Gray for inactive */
+    border-color: #b0b0b0;
+    cursor: not-allowed;
+}
+
+.contact-section {
+    margin-top: 20px;
+}
+
+.contact-section label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-bottom: 5px; /* Add space between label and input */
+}
+
+.contact-section input {
+    width: 100%; /* Full-width input */
+    padding: 10px;
+    margin-bottom: 15px; /* Space between fields */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Booking Button */
+.booking-btn {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.booking-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.booking-btn:hover:enabled {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+@media (max-width: 768px) {
+    .seat-container {
+        padding: 10px;
+    }
+
+    .info-header {
+        text-align: center;
+        padding: 15px;
+    }
+
+    .movie-title {
+        font-size: 20px;
+    }
+
+    .movie-details {
+        font-size: 14px;
+    }
+
+    .seat-header div,
+    .seat {
+        width: 40px; /* Slightly larger for small screens */
+        height: 40px;
+        line-height: 40px;
+        font-size: 12px;
+        margin: 0 4px; /* Maintain spacing between seats */
+    }
+
+    .row-number {
+        font-size: 14px;
+        width: 50px; /* Maintain consistent row number size */
+        line-height: 40px;
+    }
+
+    .seat-grid {
+        gap: 8px; /* Adjust row spacing */
+    }
+}
+
+/* Popup for validation errors */
+.popup {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #f44336; /* Red for errors */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    animation: fadeInOut 3s ease-in-out;
+}
+
+/* Popup fade-in and fade-out animation */
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+}   

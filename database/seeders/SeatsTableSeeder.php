@@ -20,6 +20,7 @@ class SeatsTableSeeder extends Seeder
                     'room_id' => 1, // Assuming Room 1 (Red Room)
                     'row_number' => $row,
                     'seat_number' => $seat,
+                    'price' => 15.00, // Example price
                 ]);
             }
         }
@@ -31,6 +32,7 @@ class SeatsTableSeeder extends Seeder
                     'room_id' => 2,
                     'row_number' => $row,
                     'seat_number' => $seat,
+                    'price' => 20.00, // Example price
                 ]);
             }
         }
@@ -42,6 +44,7 @@ class SeatsTableSeeder extends Seeder
                     'room_id' => 3,
                     'row_number' => $row,
                     'seat_number' => $seat,
+                    'price' => 15.00, // Example price
                 ]);
             }
         }
@@ -53,6 +56,7 @@ class SeatsTableSeeder extends Seeder
                     'room_id' => 4, // Assuming Room 4 (VIP Room)
                     'row_number' => $row,
                     'seat_number' => $seat,
+                    'price' => 54.00, // Example price
                 ]);
             }
         }

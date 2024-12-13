@@ -15,13 +15,14 @@ class SeatController extends Controller
         $seats = Seat::where('room_id', function ($query) use ($id) {
             $query->select('room_id')->from('schedules')->where('id', $id)->limit(1);
         })->get();
-
+    
         $bookedSeats = Booking::where('schedule_id', $id)->pluck('seat_id')->toArray();
-
+    
         $seats->each(function ($seat) use ($bookedSeats) {
             $seat->is_booked = in_array($seat->id, $bookedSeats);
+            $seat->price = $seat->price; // Include the price
         });
-
+    
         return response()->json($seats);
     }
 
