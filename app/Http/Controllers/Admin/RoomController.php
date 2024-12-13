@@ -73,6 +73,7 @@ class RoomController extends Controller
             'name' => $room->name,
             'movies' => $room->schedules->map(function ($schedule) {
                 return [
+                    'id' => $schedule->id ?? 'N/A',
                     'title' => $schedule->movie->title ?? 'Unknown',
                     'time' => \Carbon\Carbon::parse($schedule->schedule_time)->format('H:i') ?? 'N/A',
                     'price' => $schedule->price ?? 'N/A',

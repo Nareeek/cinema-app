@@ -102,23 +102,22 @@ document.addEventListener('DOMContentLoaded', () => {
     function fetchSchedule(roomId, day) {
         const tbody = document.getElementById(`schedule-body-${roomId}`);
         tbody.innerHTML = '<tr><td colspan="3" class="loading-text">Loading...</td></tr>';
-
+    
         fetch(`/rooms/${roomId}/schedule?day=${day}`)
             .then(response => response.json())
             .then(data => {
-                // alert(JSON.stringify(data, null, 2)); // Shows the entire response in a readable format
                 const rows = data.movies.map(movie => `
                     <tr>
                         <td>${movie.time || 'N/A'}</td>
                         <td><a href="/bookings/${movie.id}" class="movie-link">${movie.title}</a></td>
-                        <td>${movie.price + "$" || 'N/A'}</td>
+                        <td>${movie.price ? `$${movie.price}` : 'N/A'}</td>
                     </tr>
                 `).join('');
                 tbody.innerHTML = rows || '<tr><td colspan="3">No movies available.</td></tr>';
             })
             .catch(error => {
                 tbody.innerHTML = '<tr><td colspan="3" class="loading-text">Error loading schedule.</td></tr>';
-                console.error(error);
+                console.error("Error fetching schedule:", error);
             });
     }
 });

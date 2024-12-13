@@ -15,7 +15,6 @@ class BookingController extends Controller
         $schedule = Schedule::findOrFail($id);
         $room = $schedule->room; // Ensure Room relation exists
         $movie = $schedule->movie; // Ensure Movie relation exists
-        // dd($schedule);
     
         return view('bookings.index', compact('movie', 'room', 'schedule'));
     }
@@ -25,8 +24,7 @@ class BookingController extends Controller
         $scheduleId = $request->input('schedule_id');
     
         foreach ($selectedSeats as $seatId) {
-            // Mark seat as booked
-            Seat::where('id', $seatId)->update(['is_booked' => true]);
+            Seat::where('id', $seatId)->update(['is_booked' => 1]);
         }
     
         return response()->json(['success' => true]);

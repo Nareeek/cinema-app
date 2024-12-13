@@ -22,12 +22,12 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderCoolSeats(seatsData) {
         const seatHeader = document.getElementById("seat-header");
         const seatGrid = document.getElementById("seat-grid");
-
+    
         seatHeader.innerHTML = "";
         seatGrid.innerHTML = "";
-
+    
         const maxSeats = Math.max(...seatsData.map(seat => seat.seat_number));
-
+    
         // Render seat numbers in header
         for (let i = 1; i <= maxSeats; i++) {
             const seatNumberHeader = document.createElement("div");
@@ -35,8 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
             seatNumberHeader.className = "seat-header-number";
             seatHeader.appendChild(seatNumberHeader);
         }
-
-        // Group seats by rows
+    
         const rows = {};
         seatsData.forEach(seat => {
             if (!rows[seat.row_number]) {
@@ -44,18 +43,16 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             rows[seat.row_number].push(seat);
         });
-
-        // Render rows and seats
+    
         Object.keys(rows).forEach(rowNumber => {
             const row = document.createElement("div");
             row.className = "seat-row";
-
-            // Add row number
+    
             const rowNumberDiv = document.createElement("div");
             rowNumberDiv.className = "row-number";
             rowNumberDiv.textContent = `Row ${rowNumber}`;
             row.appendChild(rowNumberDiv);
-
+    
             rows[rowNumber].forEach(seat => {
                 const seatDiv = document.createElement("div");
                 seatDiv.className = `seat ${seat.is_booked ? "booked" : "available"}`;
@@ -63,14 +60,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 seatDiv.dataset.row = seat.row_number;
                 seatDiv.dataset.seat = seat.seat_number;
                 seatDiv.dataset.price = seat.price || 0;
-
+    
                 if (!seat.is_booked) {
                     seatDiv.addEventListener("click", () => toggleSeatSelection(seatDiv));
                 }
-
+    
                 row.appendChild(seatDiv);
             });
-
+    
             seatGrid.appendChild(row);
         });
     }
@@ -83,18 +80,20 @@ document.addEventListener("DOMContentLoaded", () => {
         if (seatDiv.classList.contains("selected")) {
             // Deselect seat
             seatDiv.classList.remove("selected");
-            selectedSeats = selectedSeats.filter(seat => seat.id != seatId);
+            selectedSeats = selectedSeats.filter(seat => String(seat.id) !== String(seatId));
             totalPrice -= price;
         } else {
             // Select seat
-            seatDiv.classList.add("selected");
-            selectedSeats.push({
-                id: seatId,
-                row: seatDiv.dataset.row,
-                seat: seatDiv.dataset.seat,
-                price: price,
-            });
-            totalPrice += price;
+            if (!selectedSeats.some(seat => String(seat.id) === String(seatId))) {
+                seatDiv.classList.add("selected");
+                selectedSeats.push({
+                    id: seatId,
+                    row: seatDiv.dataset.row,
+                    seat: seatDiv.dataset.seat,
+                    price: price,
+                });
+                totalPrice += price;
+            }
         }
 
         updateSummary();
@@ -198,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (selectedSeats.length > 0 && email && phone) {
             // Redirect to payment page with seat data
             const queryParams = new URLSearchParams({
-                selected_seats: JSON.stringify(selectedSeats.map(seat => seat.seat)),
+                selected_seats: JSON.stringify(selectedSeats),
                 total_price: totalPrice
             }).toString();
 
