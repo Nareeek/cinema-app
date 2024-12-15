@@ -18,13 +18,6 @@ class RoomsTableSeeder extends Seeder
             ['name' => 'History', 'capacity' => 10, 'type' => 'history', 'image_url' => 'history.jpg'],
             ['name' => 'Documentary', 'capacity' => 140, 'type' => 'documentary', 'image_url' => 'documentary.jpg'],
             ['name' => 'Western', 'capacity' => 90, 'type' => 'Uzbek', 'image_url' => 'western.jpg'],
-            ['name' => 'Crime', 'capacity' => 120, 'type' => 'crime', 'image_url' => 'crime.jpg'],
-            ['name' => 'Mystery', 'capacity' => 90, 'type' => 'mystery', 'image_url' => 'mystery.jpg'],
-            ['name' => 'Sci Fi', 'capacity' => 160, 'type' => 'sci_fi', 'image_url' => 'sci_fi.jpg'],
-            ['name' => 'Horror', 'capacity' => 110, 'type' => 'horror', 'image_url' => 'horror.jpg'],
-            ['name' => 'Thriller', 'capacity' => 140, 'type' => 'thriller', 'image_url' => 'thriller.jpg'],
-            ['name' => 'Noir', 'capacity' => 140, 'type' => 'noir', 'image_url' => 'noir.jpg'],
-            ['name' => 'Magic Realizm', 'capacity' => 140, 'type' => 'VIP', 'image_url' => 'magic_realizm.jpg'],
         ];
 
         // Insert data using Eloquent
