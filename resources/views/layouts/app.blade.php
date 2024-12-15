@@ -14,7 +14,7 @@
         <nav>
             <div class="logo">
                 <a href="/">
-                    <img src="{{ asset('images/logo.jpg') }}" alt="Cinema App Logo", height="40", width="50">
+                    <img src="{{ asset('posters/logo.jpg') }}" alt="Cinema App Logo", height="40", width="50">
                 </a>
             </div>
         </nav>

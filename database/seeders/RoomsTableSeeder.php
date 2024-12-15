@@ -2,47 +2,34 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Room; // Import the Room model
+use App\Models\Room;
 
 class RoomsTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run()
     {
-        Room::create([
-            'name' => 'Red Room',
-            'type' => 'Regular',
-            'description' => 'Main hall with large screen',
-            'image_url' => 'room1.jpg', // Relative path from public/
-            'capacity' => 100,
-        ]);
+        // Define room data
+        $rooms = [
+            ['name' => 'Romantic Comedy', 'capacity' => 140, 'type' => 'romantic_comedy', 'image_url' => 'romantic_comedy.jpg'],
+            ['name' => 'Animations', 'capacity' => 30, 'type' => 'animations', 'image_url' => 'animations.jpg'],
+            ['name' => 'Musicals', 'capacity' => 200, 'type' => 'musicals', 'image_url' => 'musicals.jpg'],
+            ['name' => 'Comedy', 'capacity' => 85, 'type' => 'comedy', 'image_url' => 'comedy.jpg'],
+            ['name' => 'History', 'capacity' => 10, 'type' => 'history', 'image_url' => 'history.jpg'],
+            ['name' => 'Documentary', 'capacity' => 140, 'type' => 'documentary', 'image_url' => 'documentary.jpg'],
+            ['name' => 'Western', 'capacity' => 90, 'type' => 'Uzbek', 'image_url' => 'western.jpg'],
+            ['name' => 'Crime', 'capacity' => 120, 'type' => 'crime', 'image_url' => 'crime.jpg'],
+            ['name' => 'Mystery', 'capacity' => 90, 'type' => 'mystery', 'image_url' => 'mystery.jpg'],
+            ['name' => 'Sci Fi', 'capacity' => 160, 'type' => 'sci_fi', 'image_url' => 'sci_fi.jpg'],
+            ['name' => 'Horror', 'capacity' => 110, 'type' => 'horror', 'image_url' => 'horror.jpg'],
+            ['name' => 'Thriller', 'capacity' => 140, 'type' => 'thriller', 'image_url' => 'thriller.jpg'],
+            ['name' => 'Noir', 'capacity' => 140, 'type' => 'noir', 'image_url' => 'noir.jpg'],
+            ['name' => 'Magic Realizm', 'capacity' => 140, 'type' => 'VIP', 'image_url' => 'magic_realizm.jpg'],
+        ];
 
-        Room::create([
-            'name' => 'Blue Room',
-            'type' => 'For kids',
-            'description' => 'Hall for kids and family atmosphere',
-            'image_url' => 'room2.jpg', // Relative path from public/
-            'capacity' => 150,
-        ]);
-
-        Room::create([
-            'name' => 'Green Room',
-            'type' => 'Not translated',
-            'description' => 'The hall, where all films are not translated (in english).',
-            'image_url' => 'room3.jpg', // Relative path from public/
-            'capacity' => 50,
-        ]);
-
-        Room::create([
-            'name' => 'VIP Room',
-            'type' => 'VIP',
-            'description' => 'Luxury seating with personalized service',
-            'image_url' => 'room4.jpg', // Relative path from public/
-            'capacity' => 80,
-        ]);
+        // Insert data using Eloquent
+        foreach ($rooms as $room) {
+            Room::create($room);
+        }
     }
 }
