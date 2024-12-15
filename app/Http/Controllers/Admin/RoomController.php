@@ -72,7 +72,7 @@ class RoomController extends Controller
         ->get()
         ->map(function ($schedule) {
             return [
-                'id' => $schedule->id,
+                'id' => $schedule->movie->id,
                 'time' => $schedule->schedule_time ? Carbon::parse($schedule->schedule_time)->format('H:i') : 'N/A',
                 'title' => $schedule->movie ? $schedule->movie->title : 'N/A',
                 'price' => $schedule->price,
