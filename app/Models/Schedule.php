@@ -22,4 +22,9 @@ class Schedule extends Model
     {
         return $this->hasMany(Booking::class);
     }
+
+    public function seats()
+    {
+        return $this->hasMany(Seat::class);
+    }
 }

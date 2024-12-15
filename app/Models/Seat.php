@@ -18,4 +18,9 @@ class Seat extends Model
     {
         return $this->hasOne(Booking::class);
     }
+
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class);
+    }
 }

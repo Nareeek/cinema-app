@@ -3,39 +3,51 @@ let selectedSeats = [];
 let totalPrice = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
+    const bookingData = document.getElementById("booking-data");
+
+    if (!bookingData) {
+        console.error("Booking data element not found!");
+        return;
+    }
+
+    const scheduleId = bookingData.dataset.scheduleId;
+    const roomId = bookingData.dataset.roomId;
+    const movieId = bookingData.dataset.movieId;
     const seatGrid = document.getElementById("seat-grid");
+    const seatHeader = document.getElementById("seat-header");
     const summaryTable = document.getElementById("summary-table");
     const totalPriceElement = document.getElementById("total-price");
     const continueBtn = document.getElementById("continue-btn");
     const emailInput = document.getElementById("email");
     const phoneInput = document.getElementById("phone");
 
-    // Fetch and load seats
+    // Fetch and load seats dynamically
     function loadSeats() {
         fetch(`/api/schedules/${scheduleId}/seats`)
             .then(response => response.json())
-            .then(data => renderCoolSeats(data))
+            .then(data => {
+                console.log("Fetched seat data:", data);
+                renderCoolSeats(data);
+            })
             .catch(error => console.error("Error loading seats:", error));
     }
 
     // Render seat grid dynamically
     function renderCoolSeats(seatsData) {
-        const seatHeader = document.getElementById("seat-header");
-        const seatGrid = document.getElementById("seat-grid");
-    
-        seatHeader.innerHTML = "";
-        seatGrid.innerHTML = "";
-    
-        const maxSeats = Math.max(...seatsData.map(seat => seat.seat_number));
-    
-        // Render seat numbers in header
+        seatHeader.innerHTML = ""; // Clear the seat header
+        seatGrid.innerHTML = ""; // Clear the seat grid
+
+        const maxSeats = Math.max(...seatsData.map(seat => seat.seat_number)); // Find the maximum seat number
+
+        // Render seat numbers in the header
         for (let i = 1; i <= maxSeats; i++) {
             const seatNumberHeader = document.createElement("div");
             seatNumberHeader.textContent = i;
             seatNumberHeader.className = "seat-header-number";
             seatHeader.appendChild(seatNumberHeader);
         }
-    
+
+        // Group seats by row
         const rows = {};
         seatsData.forEach(seat => {
             if (!rows[seat.row_number]) {
@@ -43,16 +55,17 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             rows[seat.row_number].push(seat);
         });
-    
+
+        // Render each row and its seats
         Object.keys(rows).forEach(rowNumber => {
             const row = document.createElement("div");
             row.className = "seat-row";
-    
+
             const rowNumberDiv = document.createElement("div");
             rowNumberDiv.className = "row-number";
             rowNumberDiv.textContent = `Row ${rowNumber}`;
             row.appendChild(rowNumberDiv);
-    
+
             rows[rowNumber].forEach(seat => {
                 const seatDiv = document.createElement("div");
                 seatDiv.className = `seat ${seat.is_booked ? "booked" : "available"}`;
@@ -60,16 +73,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 seatDiv.dataset.row = seat.row_number;
                 seatDiv.dataset.seat = seat.seat_number;
                 seatDiv.dataset.price = seat.price || 0;
-    
+
                 if (!seat.is_booked) {
+                    // Allow selection for available seats
                     seatDiv.addEventListener("click", () => toggleSeatSelection(seatDiv));
                 } else {
-                    seatDiv.title = "This seat is already booked"; // Optional tooltip
+                    // Tooltip for booked seats
+                    seatDiv.title = "This seat is already booked";
                 }
-    
+
                 row.appendChild(seatDiv);
             });
-    
+
             seatGrid.appendChild(row);
         });
     }
@@ -104,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Update booking summary
     function updateSummary() {
-        summaryTable.innerHTML = '';
+        summaryTable.innerHTML = ""; // Clear the summary table
         let newTotal = 0;
 
         selectedSeats.forEach(seat => {
@@ -112,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
             row.innerHTML = `
                 <td>${seat.row}</td>
                 <td>${seat.seat}</td>
-                <td>$${seat.price.toFixed(2)}</td>
+                <td>${seat.price.toFixed(2)}</td>
                 <td><button class="remove-seat-btn" data-id="${seat.id}">X</button></td>
             `;
             summaryTable.appendChild(row);
@@ -146,22 +161,8 @@ document.addEventListener("DOMContentLoaded", () => {
             totalPrice -= seat.price;
 
             updateSummary();
-            validateForm(); // Validate form on seat removal
+            validateForm();
         }
-    }
-
-    // Show popup alert
-    function showPopup(message) {
-        const popup = document.createElement("div");
-        popup.className = "popup";
-        popup.textContent = message;
-
-        document.body.appendChild(popup);
-
-        // Remove popup after 3 seconds
-        setTimeout(() => {
-            popup.remove();
-        }, 3000);
     }
 
     // Validate form inputs
@@ -172,52 +173,42 @@ document.addEventListener("DOMContentLoaded", () => {
         const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         const isValidPhone = /^\d{10,15}$/.test(phone);
 
-        // Enable the button only if all conditions are met
+        // Enable the continue button only if all conditions are met
         continueBtn.disabled = !(selectedSeats.length > 0 && isValidEmail && isValidPhone);
     }
 
     // Handle continue button click
     continueBtn.addEventListener("click", () => {
-        const email = emailInput.value.trim();
-        const phone = phoneInput.value.trim();
-
-        if (!email || !phone) {
-            showPopup("Please fill in both email and phone fields.");
+        if (selectedSeats.length === 0 || !emailInput.value || !phoneInput.value) {
+            alert("Please select seats and provide contact details.");
             return;
         }
 
-        if (!validateEmail(email)) {
-            showPopup("Please enter a valid email address.");
-            return;
-        }
-
-        if (!validatePhone(phone)) {
-            showPopup("Please enter a valid phone number.");
-            return;
-        }
-
-        if (selectedSeats.length > 0 && email && phone) {
-            // Redirect to payment page with seat data
-            const queryParams = new URLSearchParams({
-                selected_seats: JSON.stringify(selectedSeats),
-                total_price: totalPrice
-            }).toString();
-
-            window.location.href = `/payment?${queryParams}`;
-        }
+        // Redirect to payment page with booking data
+        fetch('/payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: JSON.stringify({
+                schedule_id: scheduleId,
+                selected_seats: selectedSeats,
+                total_price: totalPrice,
+            }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                // Redirect on success
+                window.location.href = '/payment';
+            })
+            .catch(error => {
+                console.error("Error redirecting to payment:", error);
+                alert("An error occurred while redirecting to the payment page. Please try again.");
+            });
     });
-
-    // Email validation
-    function validateEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
-
-    // Phone validation
-    function validatePhone(phone) {
-        const phoneRegex = /^\d{10,15}$/; // Only digits, 10-15 characters
-        return phoneRegex.test(phone);
-    }
 
     // Attach input listeners for validation
     emailInput.addEventListener("input", validateForm);

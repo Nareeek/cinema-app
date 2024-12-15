@@ -284,9 +284,10 @@
 
 /* Booked Seats */
 .seat.booked {
-    background-color: #f08080; /* Red for booked */
+    background-color: #f08080; /* Red for booked seats */
     border: 2px solid #d32f2f;
-    cursor: not-allowed; /* Prevent click interaction */
+    cursor: not-allowed; /* Prevent interaction */
+    opacity: 0.7; /* Slightly transparent */
 }
 
 .seat.inactive {

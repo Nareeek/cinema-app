@@ -16,30 +16,40 @@ Route::get('/', function () {
     return view('welcome', compact('movies', 'rooms'));
 });
 
-Route::get('/rooms/{id}/schedule', [RoomController::class, 'schedule']);
-
-Route::view('/rooms', 'rooms.index');
-
-// Route::view('/movies/{id}', 'movies.show')->where('id', '[0-9]+');
 Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.details');
 Route::get('/movies/{id}/schedule', [MovieController::class, 'getSchedules']);
 
-// Route::view('/bookings/{id}', 'bookings.index')->where('id', '[0-9]+');
+Route::get('/rooms', [RoomController::class, 'index']);
+Route::get('/rooms/{id}/schedule', [RoomController::class, 'schedule']);
 
-Route::view('/schedules', 'schedules.index');
-Route::get('/schedules/{scheduleId}/seats', [SeatController::class, 'getSeatAvailability']);
-
-Route::get('/payment', [PaymentController::class, 'paymentPage'])->name('payment.page');
-// Route::get('/payment', [PaymentController::class, 'paymentPage'])->name('payment');
-Route::post('/api/confirm-booking', [BookingController::class, 'confirmBooking']);
-
-Route::view('/bookings/success', 'bookings.success');
 Route::get('/bookings/{id}', [BookingController::class, 'index'])->where('id', '[0-9]+');
+Route::post('/api/confirm-booking', [BookingController::class, 'confirmBooking']);
+Route::view('/bookings/success', 'bookings.success')->name('bookings.success');
 
+Route::get('/api/schedules/{scheduleId}/seats', [SeatController::class, 'getSeatAvailability']);
+Route::post('/api/schedules/{id}/book', [SeatController::class, 'book']);
 
+Route::post('/payment', [PaymentController::class, 'processBookingData'])->name('payment.page');
+Route::get('/payment', [PaymentController::class, 'showPaymentPage'])->name('payment.show');
+Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
+
+// Slideshow images route
 Route::get('/api/slideshow-images', [SlideshowController::class, 'getSlideshowImages']);
 
-// Admin Portal
+// Admin routes
 Route::view('/admin/schedules', 'admin.schedules.index');
 Route::view('/admin/rooms', 'admin.rooms.index');
 Route::view('/admin/movies', 'admin.movies.index');
+
+Route::get('/api/admin/movies', [MovieController::class, 'index']);
+Route::post('/api/admin/movies', [MovieController::class, 'store']);
+Route::get('/api/admin/movies/{id}', [MovieController::class, 'show']);
+Route::put('/api/admin/movies/{id}', [MovieController::class, 'update']);
+Route::delete('/api/admin/movies/{id}', [MovieController::class, 'destroy']);
+
+// Prevent Debugbar direct access in local environment
+if (app()->environment('local')) {
+    Route::get('/_debugbar/*', function () {
+        abort(404);
+    });
+}

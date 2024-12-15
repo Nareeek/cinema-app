@@ -1,63 +1,67 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const paymentContainer = document.getElementById('payment-container');
+    const paymentData = document.getElementById("payment-data");
 
-    // Parse data from the container
-    const selectedSeats = JSON.parse(paymentContainer.dataset.selectedSeats || '[]');
-    const totalPrice = parseFloat(paymentContainer.dataset.totalPrice || '0');
-    const scheduleId = paymentContainer.dataset.scheduleId;
-
-    // Function to format seats
-    function formatSeats(seats) {
-        // Group seats by row
-        const groupedByRow = seats.reduce((acc, seat) => {
-            const row = seat.row_number; // Use correct property name
-            const number = seat.seat_number; // Use correct property name
-
-            if (row && number) { // Ensure both row and number exist
-                acc[row] = acc[row] || [];
-                acc[row].push(number);
-            }
-            return acc;
-        }, {});
-
-        // Format grouped data into a readable string
-        return Object.entries(groupedByRow)
-            .map(([row, numbers]) => `Row ${row}: Seats ${numbers.join(', ')}`)
-            .join(' | ');
+    if (!paymentData) {
+        console.error("Payment data element not found!");
+        return;
     }
 
-    // Populate booking summary
+    // Extract data from data attributes
+    const selectedSeats = JSON.parse(paymentData.dataset.selectedSeats || '[]');
+    const totalPrice = parseFloat(paymentData.dataset.totalPrice || '0');
+    const scheduleId = paymentData.dataset.scheduleId;
+
+    // DOM elements
     const seatsElement = document.getElementById('selected-seats');
     const totalPriceElement = document.getElementById('total-price');
-
-    // Format and display selected seats
-    seatsElement.textContent = selectedSeats.length > 0
-        ? formatSeats(selectedSeats)
-        : 'No seats selected.';
-
-    // Display total price
-    totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`; // Add dollar sign
-
-    // Payment Methods Logic
     const paymentMethods = document.querySelectorAll('.payment-method');
     const confirmPaymentBtn = document.getElementById('confirm-payment-btn');
-    let selectedMethod = null;
+
+    // Validate essential elements
+    if (!seatsElement || !totalPriceElement || !confirmPaymentBtn || paymentMethods.length === 0) {
+        console.error("One or more required elements are missing from the DOM.");
+        return;
+    }
+
+    let selectedPaymentMethod = null;
+
+    // Display selected seats and total price
+    seatsElement.textContent = selectedSeats.length > 0
+        ? selectedSeats.map(seat => `Row ${seat.row}, Seat ${seat.seat}`).join(' | ')
+        : 'No seats selected.';
+    totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
+
+    // Disable the confirm button initially
+    confirmPaymentBtn.disabled = true;
 
     // Handle payment method selection
     paymentMethods.forEach(method => {
         method.addEventListener('click', () => {
-            paymentMethods.forEach(m => m.classList.remove('selected')); // Deselect all methods
-            method.classList.add('selected'); // Highlight the selected method
-            selectedMethod = method.dataset.method; // Set selected method
-            confirmPaymentBtn.disabled = false; // Enable confirm button
+            // Remove "selected" class from all methods
+            paymentMethods.forEach(m => m.classList.remove('selected'));
+
+            // Add "selected" class to the clicked method
+            method.classList.add('selected');
+
+            // Store the selected method
+            selectedPaymentMethod = method.dataset.method;
+
+            // Enable the confirm button if a payment method is selected
+            confirmPaymentBtn.disabled = false;
+
+            console.log("Selected Payment Method:", selectedPaymentMethod);
         });
     });
 
     // Handle payment confirmation
     confirmPaymentBtn.addEventListener('click', () => {
-        if (!selectedMethod) return; // Ensure a payment method is selected
+        if (!selectedPaymentMethod) {
+            alert("Please select a payment method.");
+            return;
+        }
 
-        // Confirm booking via API
+        console.log("Initiating booking confirmation...");
+
         fetch('/api/confirm-booking', {
             method: 'POST',
             headers: {
@@ -67,7 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify({
                 selected_seats: selectedSeats,
                 schedule_id: scheduleId,
-                payment_method: selectedMethod,
+                total_price: totalPrice,
+                payment_method: selectedPaymentMethod,
             }),
         })
             .then(response => {
@@ -81,12 +86,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     window.location.href = '/bookings/success'; // Redirect to success page
                 } else {
                     console.error("Booking confirmation failed:", data.message);
-                    alert("Booking confirmation failed. Please try again.");
+                    alert(data.message || "Booking confirmation failed. Please try again.");
                 }
             })
             .catch(error => {
                 console.error("Error confirming booking:", error);
-                alert("An error occurred. Please try again.");
+                alert("Sorry, something went wrong while processing your payment. Please try again later.");
             });
     });
 });

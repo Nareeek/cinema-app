@@ -61,11 +61,10 @@ class SeatController extends Controller
     }
 
     // Fetch seat availability for a specific schedule
-    public function getSeatAvailability($scheduleId) {
-        $seats = Seat::where('schedule_id', $scheduleId)
-            ->select('id', 'row_number', 'seat_number', 'is_booked', 'price')
-            ->get();
-
+    public function getSeatAvailability($scheduleId)
+    {
+        $seats = Seat::where('schedule_id', $scheduleId)->get();
+    
         return response()->json($seats);
     }
 }
