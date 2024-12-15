@@ -29,7 +29,3 @@ class DatabaseSeeder extends Seeder
         ]);
     }
 }
-
-
-// Database\Seeders\UserTableSeeder
-// 'Database\Seeders\SchedulesTableSeeder'

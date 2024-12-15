@@ -18,6 +18,7 @@ Route::get('/', function () {
 
 Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.details');
 Route::get('/movies/{id}/schedule', [MovieController::class, 'getSchedules']);
+Route::get('/movies/{movie}/rooms', [MovieController::class, 'getRoomsByDate']);
 
 Route::get('/rooms', [RoomController::class, 'index']);
 Route::get('/rooms/{id}/schedule', [RoomController::class, 'schedule']);

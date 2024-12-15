@@ -3,62 +3,39 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Carbon;
 use App\Models\Schedule;
-use App\Models\Movie;
 use App\Models\Room;
+use App\Models\Movie;
+use Carbon\Carbon;
 
 class SchedulesTableSeeder extends Seeder
 {
     public function run()
     {
-        $movies = Movie::all();
         $rooms = Room::all();
-
-        if ($movies->isEmpty() || $rooms->isEmpty()) {
-            $this->command->info('No movies or rooms found. Please seed movies and rooms first.');
-            return;
-        }
-
-        // Track unique schedule times for each movie and room
-        $movieScheduleTimes = [];
-        $roomScheduleTimes = [];
-
-        foreach ($movies as $movie) {
-            foreach ($rooms as $room) {
-                // Initialize tracking arrays for movie and room if not already set
-                if (!isset($movieScheduleTimes[$movie->id])) {
-                    $movieScheduleTimes[$movie->id] = [];
+        $movies = Movie::all();
+        $scheduleStartTime = Carbon::today()->addHours(10); // Start at 10:00 AM
+        $intervalMinutes = 180; // 3-hour intervals
+    
+        foreach ($rooms as $room) {
+            $currentScheduleTime = $scheduleStartTime;
+    
+            foreach ($movies->take(20) as $movie) { // Use up to 20 movies per room
+                // Ensure unique schedule_time for the room
+                if (Schedule::where('room_id', $room->id)->where('schedule_time', $currentScheduleTime)->exists()) {
+                    $currentScheduleTime->addMinutes($intervalMinutes); // Skip to the next available time slot
+                    continue;
                 }
-                if (!isset($roomScheduleTimes[$room->id])) {
-                    $roomScheduleTimes[$room->id] = [];
-                }
-
-                // Generate 3 schedules per movie-room combination
-                for ($i = 0; $i < 3; $i++) {
-                    do {
-                        // Generate a random schedule time
-                        $scheduleTime = Carbon::now()
-                            ->addDays(rand(1, 7))
-                            ->addHours(rand(0, 23))
-                            ->format('Y-m-d H:i:s');
-                    } while (
-                        in_array($scheduleTime, $movieScheduleTimes[$movie->id]) || // Ensure unique for movie
-                        in_array($scheduleTime, $roomScheduleTimes[$room->id])    // Ensure unique for room
-                    );
-
-                    // Store the generated schedule time for both movie and room
-                    $movieScheduleTimes[$movie->id][] = $scheduleTime;
-                    $roomScheduleTimes[$room->id][] = $scheduleTime;
-
-                    // Create the schedule
-                    Schedule::create([
-                        'movie_id' => $movie->id,
-                        'room_id' => $room->id,
-                        'schedule_time' => $scheduleTime,
-                        'price' => rand(10, 20), // Random price between $10 and $20
-                    ]);
-                }
+    
+                Schedule::create([
+                    'room_id' => $room->id,
+                    'movie_id' => $movie->id,
+                    'schedule_time' => $currentScheduleTime->toDateTimeString(),
+                    'price' => rand(10, 30), // Random price between 10 and 30
+                    'status' => 'Active',
+                ]);
+    
+                $currentScheduleTime->addMinutes($intervalMinutes); // Move to the next time slot
             }
         }
     }

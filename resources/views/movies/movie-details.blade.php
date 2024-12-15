@@ -11,7 +11,7 @@
 @endpush
 
 @section('content')
-<div class="movie-details">
+<div class="movie-details" data-movie-id="{{ $movie->id }}">
     <!-- Movie Header -->
     <div class="movie-header">
         <img src="{{ asset('posters/' . $movie->poster_url) }}" alt="{{ $movie->title }}">
@@ -30,8 +30,9 @@
     <div class="schedule-section">
         <h2>Schedule</h2>
         <div class="filter-section">
-            <button class="filter-btn active" data-day="today" onclick="filterSchedule('today')">Today</button>
-            <button class="filter-btn" data-day="tomorrow" onclick="filterSchedule('tomorrow')">Tomorrow</button>
+            <button id="today-button" class="filter-btn active" data-day="today" onclick="filterSchedule('today')">Today</button>
+            <button id="tomorrow-button" class="filter-btn" data-day="tomorrow" onclick="filterSchedule('tomorrow')">Tomorrow</button>            
+            <input type="text" id="date-picker" class="date-picker" placeholder="Pick a date">
         </div>
         <table class="schedule-table">
             <thead>
@@ -43,11 +44,31 @@
                 </tr>
             </thead>
             <tbody id="schedule-body">
+                <!-- Schedules will be dynamically inserted here -->
                 <tr>
                     <td colspan="4" class="loading-text">Loading...</td>
                 </tr>
             </tbody>
         </table>
+
+        <div class="room-section">
+            <h3>Available Rooms</h3>
+            <table id="room-table">
+                <thead>
+                    <tr>
+                        <th>Room Name</th>
+                        <th>Capacity</th>
+                        <th>Schedule Time</th>
+                    </tr>
+                </thead>
+                <tbody id="room-table-body">
+                    <!-- Rows will be dynamically inserted here -->
+                    <tr>
+                        <td colspan="4" class="loading-text">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 @endsection

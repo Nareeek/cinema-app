@@ -23,6 +23,17 @@ document.querySelectorAll('.slideshow .slide img').forEach((img) => {
     });
 });
 
+document.querySelectorAll('.view-more-btn').forEach((button) => {
+    const roomId = button.dataset.roomId; // Assume buttons have a `data-room-id` attribute
+    button.addEventListener('click', () => {
+        const hiddenRows = document.querySelectorAll(`#schedule-body-${roomId} .hidden-row`);
+        hiddenRows.forEach((row, index) => {
+            if (index < 10) row.classList.remove('hidden-row');
+        });
+        button.style.display = 'none';
+    });
+});
+
 // Start slideshow automatically
 function startSlideshow() {
     slideInterval = setInterval(switchSlide, 3000);
@@ -46,9 +57,6 @@ document.querySelectorAll('.slideshow .slide img').forEach((img) => {
         window.location.href = `/movies/${movieId}`;
     });
 });
-
-startSlideshow();
-
 
 // Room schedule functionality
 function showRoomSchedule(roomElement) {
@@ -78,17 +86,20 @@ function showRoomSchedule(roomElement) {
             `;
         });
 }
-
 document.addEventListener('DOMContentLoaded', () => {
-    window.toggleSchedule = function(roomId) {
+    window.toggleScheduled = function (roomId, event) {
+        if (event && (event.target.classList.contains('date-picker') || event.target.closest('.filter-section'))) {
+            return; // Do nothing if the click is inside date picker or filter section
+        }
+
         const section = document.getElementById(`schedule-${roomId}`);
         section.style.display = section.style.display === 'none' ? 'block' : 'none';
-
+    
         if (section.style.display === 'block') {
-            fetchSchedule(roomId, 'today');
+            fetchSchedule(roomId, 'today'); // Fetch the schedule for the room when expanded
         }
     };
-
+    
     window.filterSchedule = function(event, roomId, day) {
         event.stopPropagation(); // Prevent the event from bubbling up
     
@@ -104,20 +115,92 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody.innerHTML = '<tr><td colspan="3" class="loading-text">Loading...</td></tr>';
     
         fetch(`/rooms/${roomId}/schedule?day=${day}`)
-            .then(response => response.json())
-            .then(data => {
-                const rows = data.movies.map(movie => `
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (!data.movies || data.movies.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3">No movies available for the selected date.</td></tr>';
+                    return;
+                }
+    
+                const rows = data.movies
+                    .map(
+                        (movie) => `
                     <tr>
                         <td>${movie.time || 'N/A'}</td>
-                        <td><a href="/bookings/${movie.id}" class="movie-link">${movie.title}</a></td>
+                        <td><a href="/movies/${movie.id}" class="movie-link">${movie.title || 'N/A'}</a></td>
                         <td>${movie.price ? `$${movie.price}` : 'N/A'}</td>
                     </tr>
-                `).join('');
-                tbody.innerHTML = rows || '<tr><td colspan="3">No movies available.</td></tr>';
+                `
+                    )
+                    .join('');
+                tbody.innerHTML = rows;
             })
-            .catch(error => {
+            .catch((error) => {
+                console.error('Error fetching schedule:', error);
                 tbody.innerHTML = '<tr><td colspan="3" class="loading-text">Error loading schedule.</td></tr>';
-                console.error("Error fetching schedule:", error);
             });
     }
+
+    document.querySelectorAll('.view-more-btn').forEach((button) => {
+        const roomId = button.dataset.roomId; // Assume buttons have a `data-room-id` attribute
+        button.addEventListener('click', () => {
+            const hiddenRows = document.querySelectorAll(`#schedule-body-${roomId} .hidden-row`);
+            hiddenRows.forEach((row, index) => {
+                if (index < 10) row.classList.remove('hidden-row');
+            });
+            button.style.display = 'none';
+        });
+    });
+
+    // Function to filter schedules by a specific date
+    window.filterScheduleByDate = function (event, roomId) {
+        const selectedDate = event.target.value; // Get the selected date
+        const tbody = document.getElementById(`schedule-body-${roomId}`);
+        tbody.innerHTML = '<tr><td colspan="3" class="loading-text">Loading...</td></tr>';
+    
+        fetch(`/rooms/${roomId}/schedule?date=${selectedDate}`)
+            .then((response) => response.json())
+            .then((data) => {
+                const rows = data.movies
+                    .map(
+                        (movie) => `
+                    <tr>
+                        <td>${movie.time || 'N/A'}</td>
+                        <td><a href="/bookings/${movie.id}" class="movie-link">${movie.title || 'N/A'}</a></td>
+                        <td>${movie.price ? `$${movie.price}` : 'N/A'}</td>
+                    </tr>
+                `
+                    )
+                    .join('');
+                tbody.innerHTML = rows || '<tr><td colspan="3">No movies available.</td></tr>';
+            })
+            .catch((error) => {
+                tbody.innerHTML = '<tr><td colspan="3" class="loading-text">Error loading schedule.</td></tr>';
+                console.error('Error fetching schedule:', error);
+            });
+    };
+    
+    document.querySelectorAll('.date-picker').forEach((input) => {
+        flatpickr(input, {
+            altInput: true,
+            altFormat: 'F j, Y',
+            dateFormat: 'Y-m-d',
+            minDate: 'today',
+            onChange: function (selectedDates, dateStr) {
+                const roomId = input.getAttribute('data-room-id');
+                if (roomId) {
+                    fetchSchedule(roomId, dateStr); // Room-specific logic
+                }
+            },
+        });
+    });
+    
+
+    startSlideshow();
+
 });
