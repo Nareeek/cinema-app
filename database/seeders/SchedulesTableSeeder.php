@@ -3,40 +3,30 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Schedule;
-use App\Models\Room;
-use App\Models\Movie;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class SchedulesTableSeeder extends Seeder
 {
     public function run()
     {
-        $rooms = Room::all();
-        $movies = Movie::all();
-        $scheduleStartTime = Carbon::today()->addHours(10); // Start at 10:00 AM
-        $intervalMinutes = 180; // 3-hour intervals
-    
-        foreach ($rooms as $room) {
-            $currentScheduleTime = $scheduleStartTime;
-    
-            foreach ($movies->take(20) as $movie) { // Use up to 20 movies per room
-                // Ensure unique schedule_time for the room
-                if (Schedule::where('room_id', $room->id)->where('schedule_time', $currentScheduleTime)->exists()) {
-                    $currentScheduleTime->addMinutes($intervalMinutes); // Skip to the next available time slot
-                    continue;
-                }
-    
-                Schedule::create([
-                    'room_id' => $room->id,
-                    'movie_id' => $movie->id,
-                    'schedule_time' => $currentScheduleTime->toDateTimeString(),
-                    'price' => rand(10, 30), // Random price between 10 and 30
-                    'status' => 'Active',
-                ]);
-    
-                $currentScheduleTime->addMinutes($intervalMinutes); // Move to the next time slot
+        $schedules = [
+            ['movie_id' => 1, 'room_id' => 1, 'schedule_time' => '2024-12-16 00:00:00', 'price' => 36, 'status' => 'Active'],
+            ['movie_id' => 2, 'room_id' => 1, 'schedule_time' => '2024-12-16 02:00:00', 'price' => 33, 'status' => 'Active'],
+            // Ensure all `movie_id` + `schedule_time` combinations are unique
+        ];
+
+        $existingSchedules = DB::table('schedules')
+            ->select('movie_id', 'schedule_time')
+            ->get()
+            ->toArray();
+
+
+        foreach ($schedules as $schedule) {
+            if (in_array(['movie_id' => $schedule['movie_id'], 'schedule_time' => $schedule['schedule_time']], $existingSchedules)) {
+                dd('Duplicate found', $schedule);
             }
         }
     }
 }
+
+
