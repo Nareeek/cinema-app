@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('room_id')->constrained()->cascadeOnDelete(); // Foreign key to Rooms
             $table->foreignId('movie_id')->constrained()->cascadeOnDelete(); // Foreign key to Movies
             $table->dateTime('schedule_time'); // Showtime
+            $table->decimal('price', 8, 2); // Ticket price
             $table->string('status')->default('Active'); // Active/Inactive status
             $table->timestamps(); // created_at, updated_at
             $table->softDeletes(); // Soft deletion timestamp

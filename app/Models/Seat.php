@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Seat extends Model
 {
-    protected $fillable = ['row_number', 'seat_number', 'room_id', 'is_booked']; // Include is_booked
-
+    protected $fillable = ['room_id', 'row_number', 'seat_number'];
 
     public function room()
     {
@@ -17,10 +16,5 @@ class Seat extends Model
     public function bookings()
     {
         return $this->hasOne(Booking::class);
-    }
-
-    public function schedule()
-    {
-        return $this->belongsTo(Schedule::class);
     }
 }

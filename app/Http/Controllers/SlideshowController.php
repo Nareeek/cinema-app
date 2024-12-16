@@ -11,11 +11,11 @@ class SlideshowController extends Controller
      */
     public function getSlideshowImages()
     {
-        $imageFiles = File::files(public_path('posters'));
+        $imageFiles = File::files(public_path('images'));
         $images = [];
 
         foreach ($imageFiles as $file) {
-            $images[] = '/posters/' . $file->getFilename(); // Include file path
+            $images[] = '/images/' . $file->getFilename(); // Include file path
         }
 
         return response()->json($images);

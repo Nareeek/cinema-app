@@ -112,35 +112,3 @@
 .movie-image {
     cursor: pointer; /* Ensures the pointer cursor appears on hover */
 }
-
-input[type="date"] {
-    padding: 8px;
-    font-size: 16px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    width: auto;
-    cursor: pointer;
-}
-
-input[type="date"]:hover {
-    border-color: #007BFF;
-    background-color: #f0f8ff;
-}
-
-.hidden-row {
-    display: none;
-}
-
-.date-picker {
-    padding: 8px;
-    font-size: 16px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    width: auto;
-    cursor: pointer;
-}
-
-.date-picker:hover {
-    border-color: #007BFF;
-    background-color: #f0f8ff;
-}

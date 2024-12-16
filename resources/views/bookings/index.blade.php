@@ -8,25 +8,20 @@
 
 @push('scripts')
 <script src="{{ asset('js/seat-booking.js') }}" defer></script>
+<script>
+    // Pass scheduleId from the backend to the frontend
+    const scheduleId = {{ $schedule->id }};
+</script>
 @endpush
 
 @section('content')
 <div class="container">
-    <!-- Hidden Data for JavaScript -->
-    <div id="booking-data" 
-         data-schedule-id="{{ $schedule->id }}" 
-         data-movie-id="{{ $movie->id }}" 
-         data-room-id="{{ $room->id }}">
-    </div>
-
     <!-- Info Header -->
     <div id="info-header" class="info-header">
         <div class="info-row">
             <span class="movie-title">{{ $movie->title }}</span>
             <span class="movie-room">Room: {{ $room->name }}</span>
-            <span class="movie-datetime">
-                {{ \Carbon\Carbon::parse($schedule->schedule_time)->format('M d, Y h:i A') }}
-            </span>
+            <span class="movie-datetime">{{ \Carbon\Carbon::parse($schedule->date_time)->format('M d, Y h:i A') }}</span>
         </div>
     </div>
 
@@ -50,7 +45,7 @@
             </thead>
             <tbody id="summary-table"></tbody>
         </table>
-        <p>Total Price: <span id="total-price">0.00</span></p>
+        <p>Total Price: $<span id="total-price">0.00</span></p>
     </div>
 
     <!-- Email and Phone Section -->
@@ -62,5 +57,4 @@
         <input type="text" id="phone" placeholder="Enter your phone number" required>
         <button id="continue-btn" class="booking-btn" disabled>Continue to Payment</button>
     </div>
-</div>
 @endsection
