@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id(); // Primary Key
             $table->string('title'); // Movie title
             $table->text('description')->nullable(); // Movie description
-            $table->string('poster_url'); // URL for poster image
+            $table->string('poster_url')->nullable()->default(null); // URL for poster image
             $table->string('trailer_url')->nullable(); // Optional trailer link
             $table->integer('duration'); // Duration in minutes
             $table->timestamps(); // created_at, updated_at

@@ -2,63 +2,28 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Seat;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class SeatsTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        // Example: Add seats for Room 1 (Red Room)
-        for ($row = 1; $row <= 10; $row++) {
-            for ($seat = 1; $seat <= 10; $seat++) {
-                Seat::create([
-                    'room_id' => 1, // Assuming Room 1 (Red Room)
-                    'row_number' => $row,
-                    'seat_number' => $seat,
-                    'price' => 15.00, // Example price
-                ]);
+        $schedules = DB::table('schedules')->pluck('id');
+        $seats = [];
+
+        foreach ($schedules as $scheduleId) {
+            $seatCount = rand(20, 100); // Random number of seats
+            for ($i = 1; $i <= $seatCount; $i++) {
+                $seats[] = [
+                    'schedule_id' => $scheduleId,
+                    'seat_number' => $i,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
             }
         }
 
-        // Example: Add seats for Room 2 (Blue Room)
-        for ($row = 1; $row <= 5; $row++) {
-            for ($seat = 1; $seat <= 8; $seat++) {
-                Seat::create([
-                    'room_id' => 2,
-                    'row_number' => $row,
-                    'seat_number' => $seat,
-                    'price' => 20.00, // Example price
-                ]);
-            }
-        }
-
-        // Example: Add seats for Room 3 (Green Room)
-        for ($row = 1; $row <= 5; $row++) {
-            for ($seat = 1; $seat <= 8; $seat++) {
-                Seat::create([
-                    'room_id' => 3,
-                    'row_number' => $row,
-                    'seat_number' => $seat,
-                    'price' => 15.00, // Example price
-                ]);
-            }
-        }
-
-        // Example: Add seats for Room 4 (VIP Room)
-        for ($row = 1; $row <= 5; $row++) {
-            for ($seat = 1; $seat <= 8; $seat++) {
-                Seat::create([
-                    'room_id' => 4, // Assuming Room 4 (VIP Room)
-                    'row_number' => $row,
-                    'seat_number' => $seat,
-                    'price' => 54.00, // Example price
-                ]);
-            }
-        }
+        DB::table('seats')->insert($seats);
     }
 }

@@ -30,8 +30,6 @@ Route::get('/rooms/{id}/schedules', [RoomController::class, 'schedules']); // Ro
 Route::get('/movies', [MovieController::class, 'index']); // List all movies
 Route::get('/movies/{id}', [MovieController::class, 'show']); // Movie details with schedules
 
-Route::get('/schedules/{id}/seats', [SeatController::class, 'availability']); // Seat availability
-Route::post('/schedules/{id}/book', [SeatController::class, 'book']); // Book a seat
 
 // Room CRUD API routes
 Route::prefix('admin')->group(function () {

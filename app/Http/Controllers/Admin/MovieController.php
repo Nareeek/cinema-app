@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Movie;
+use App\Models\Room;
+use App\Models\Schedule;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class MovieController extends Controller
@@ -36,27 +39,27 @@ class MovieController extends Controller
         return view('movies.movie-details', compact('movie'));
     }
 
-    public function getSchedules($id, Request $request)
+    public function getSchedules(Request $request, $movieId)
     {
-        $day = $request->query('day', 'today');
-        $movie = Movie::findOrFail($id);
-        $schedules = $movie->schedules()
-            ->whereDate('show_date', $day === 'today' ? now() : now()->addDay())
-            ->get();
-
-        return response()->json([
-            'schedules' => $schedules->map(function ($schedule) {
+        $day = $request->input('day', 'today');
+        $date = $day === 'today' ? Carbon::today() : ($day === 'tomorrow' ? Carbon::tomorrow() : Carbon::parse($day));
+    
+        $schedules = Schedule::with('room')
+            ->where('movie_id', $movieId)
+            ->whereDate('schedule_time', $date)
+            ->get()
+            ->map(function ($schedule) {
                 return [
                     'id' => $schedule->id,
-                    'time' => $schedule->schedule_time ?? 'N/A',
+                    'time' => Carbon::parse($schedule->schedule_time)->format('H:i'),
                     'room' => $schedule->room->name ?? 'N/A',
                     'price' => $schedule->price,
                 ];
-            }),
-        ]);
+            });
+
+        return response()->json(['schedules' => $schedules]);
     }
 
-    // Update a movie
     public function update(Request $request, $id)
     {
         $movie = Movie::findOrFail($id);
@@ -73,11 +76,31 @@ class MovieController extends Controller
         return response()->json($movie);
     }
 
-    // Delete a movie
     public function destroy($id)
     {
         $movie = Movie::findOrFail($id);
         $movie->delete();
         return response()->json(['message' => 'Movie deleted successfully']);
     }
+
+    public function getRoomsByDate(Movie $movie, Request $request)
+    {
+        $date = $request->input('date');
+        $formattedDate = Carbon::parse($date)->toDateString();
+        // \Log::info("Fetching rooms for movie ID {$movie->id} on date {$formattedDate}");
+    
+        $rooms = Room::with(['schedules' => function ($query) use ($movie, $formattedDate) {
+            $query->where('movie_id', $movie->id)
+                  ->whereDate('schedule_time', $formattedDate);
+        }])->get()->map(function ($room) {
+            return [
+                'id' => $room->id,
+                'name' => $room->name,
+                'capacity' => $room->capacity,
+                'schedule_time' => $room->schedules->isNotEmpty() ? $room->schedules[0]->schedule_time : 'No schedule available',
+            ];
+        });
+        return response()->json(['rooms' => $rooms]);
+    }    
+    
 }

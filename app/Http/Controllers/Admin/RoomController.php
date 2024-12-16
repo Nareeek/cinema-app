@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Room;
+use Carbon\Carbon;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
 
 class RoomController extends Controller
@@ -59,25 +61,23 @@ class RoomController extends Controller
         return response()->json(['message' => 'Room deleted successfully']);
     }
 
-    public function schedule($id)
+    public function schedule(Request $request, $roomId)
     {
-        // Attempt to find the room by ID and load its schedules and movies
-        $room = Room::with('schedules.movie')->find($id);
+        $day = $request->input('day', 'today');
+        $date = $day === 'today' ? Carbon::today() : ($day === 'tomorrow' ? Carbon::tomorrow() : Carbon::parse($day));
     
-        if (!$room) {
-            return response()->json(['error' => 'Room not found'], 404);
-        }
-    
-        // Format the response
-        return response()->json([
-            'name' => $room->name,
-            'movies' => $room->schedules->map(function ($schedule) {
-                return [
-                    'title' => $schedule->movie->title ?? 'Unknown',
-                    'time' => $schedule->schedule_time ?? 'N/A',
-                    'price' => $schedule->price ?? 'N/A',
-                ];
-            }),
-        ]);
-    }    
+        $schedules = Schedule::with('movie')
+        ->where('room_id', $roomId)
+        ->whereDate('schedule_time', $date)
+        ->get()
+        ->map(function ($schedule) {
+            return [
+                'id' => $schedule->movie->id,
+                'time' => $schedule->schedule_time ? Carbon::parse($schedule->schedule_time)->format('H:i') : 'N/A',
+                'title' => $schedule->movie ? $schedule->movie->title : 'N/A',
+                'price' => $schedule->price,
+            ];
+        });
+        return response()->json(['movies' => $schedules]);
+    }
 }

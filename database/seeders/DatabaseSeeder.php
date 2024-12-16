@@ -22,10 +22,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoomsTableSeeder::class,
             MoviesTableSeeder::class,
-            UsersTableSeeder::class,
             SchedulesTableSeeder::class,
-            SeatsTableSeeder::class, // Ensure this runs before BookingsTableSeeder
-            BookingsTableSeeder::class,
+            UsersTableSeeder::class,
+            SeatsTableSeeder::class, 
+            // BookingsTableSeeder::class,
         ]);
     }
 }

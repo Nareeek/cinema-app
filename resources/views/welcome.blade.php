@@ -16,7 +16,7 @@
     <div class="slideshow">
         @foreach($movies as $movie)
             <div class="slide"> <!-- Add 'slide' class -->
-                <img src="{{ asset('images/' . $movie->poster_url) }}" 
+                <img src="{{ asset('posters/' . $movie->poster_url) }}" 
                     alt="{{ $movie->title }}" 
                     class="movie-image" 
                     data-movie-id="{{ $movie->id }}">
@@ -29,8 +29,8 @@
     <h2>Available Rooms</h2>
     <div class="room-container">
         @foreach ($rooms as $room)
-        <div class="room-card" onclick="toggleSchedule({{ $room->id }})">
-            <img src="{{ $room->image_url ? asset('images/' . $room->image_url) : asset('images/default-room-image.jpg') }}" 
+        <div class="room-card" data-room-id="{{ $room->id }}" onclick="toggleScheduled({{ $room->id }}, event)">
+            <img src="{{ $room->image_url ? asset('posters/' . $room->image_url) : asset('posters/default-room-image.jpg') }}" 
                 alt="{{ $room->name }}">
             <h3>{{ $room->name }}</h3>
 
@@ -39,6 +39,7 @@
                 <div class="filter-section">
                     <button class="filter-btn active" onclick="filterSchedule(event, {{ $room->id }}, 'today')">Today</button>
                     <button class="filter-btn" onclick="filterSchedule(event, {{ $room->id }}, 'tomorrow')">Tomorrow</button>
+                    <input type="text" class="date-picker" placeholder="Pick a date" data-room-id="{{ $room->id }}">
                 </div>
                 <table class="schedule-table">
                     <thead>
@@ -52,6 +53,11 @@
                         <!-- Placeholder content; dynamically updated with JavaScript -->
                         <tr>
                             <td colspan="3" class="loading-text">Loading...</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button id="view-more-{{ $room->id }}" class="view-more-btn" data-room-id="{{ $room->id }}">View More</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
