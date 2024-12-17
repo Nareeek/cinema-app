@@ -44,21 +44,26 @@ class MovieController extends Controller
         $day = $request->input('day', 'today');
         $date = $day === 'today' ? Carbon::today() : ($day === 'tomorrow' ? Carbon::tomorrow() : Carbon::parse($day));
     
-        $schedules = Schedule::with('room')
+        $schedules = Schedule::with(['room', 'seats'])
             ->where('movie_id', $movieId)
             ->whereDate('schedule_time', $date)
             ->get()
             ->map(function ($schedule) {
+                // Calculate the average or minimum seat price for the schedule
+                $price = $schedule->seats->isEmpty()
+                    ? 'N/A'
+                    : $schedule->seats->min('price'); // You can use 'min', 'max', or 'avg' as needed
+    
                 return [
                     'id' => $schedule->id,
                     'time' => Carbon::parse($schedule->schedule_time)->format('H:i'),
                     'room' => $schedule->room->name ?? 'N/A',
-                    'price' => $schedule->price,
+                    'price' => $price,
                 ];
             });
-
+        
         return response()->json(['schedules' => $schedules]);
-    }
+    }    
 
     public function update(Request $request, $id)
     {
