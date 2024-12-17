@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch(`/api/schedules/${scheduleId}/seats`)
             .then(response => response.json())
             .then(data => {
-                console.log("Fetched seat data:", data);
                 renderCoolSeats(data);
             })
             .catch(error => console.error("Error loading seats:", error));

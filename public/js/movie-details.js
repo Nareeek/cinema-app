@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 scheduleBody.innerHTML = rows;
             })
             .catch(error => {
-                console.error('Error fetching schedule:', error);
                 scheduleBody.innerHTML = `
                     <tr>
                         <td colspan="4" class="loading-text">
@@ -44,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function showLoadingIndicator()
     {
         // Your loading logic here
-        console.log("Loading");
     }
 
     window.filterSchedule = function (day) {
@@ -122,13 +120,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (lastSelectedDate === date) return; // Prevent redundant fetches
         lastSelectedDate = date;
 
-        console.log(`Fetching rooms for date: ${date}`);
         showLoadingIndicator();
 
         fetch(`/movies/${movieId}/rooms?date=${date}`)
             .then((response) => response.json())
             .then((data) => {
-                console.log("Rooms fetched:", data.rooms);
                 updateRoomTable(data.rooms);
             })
             .catch((error) => {
