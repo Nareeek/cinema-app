@@ -58,8 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Enable the confirm button if a payment method is selected
             confirmPaymentBtn.disabled = false;
-
-            console.log("Selected Payment Method:", selectedPaymentMethod);
         });
     });
 
