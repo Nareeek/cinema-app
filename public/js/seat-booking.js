@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         totalPrice = newTotal;
-        totalPriceElement.textContent = totalPrice.toFixed(2);
+        totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
 
         // Add remove seat functionality
         document.querySelectorAll(".remove-seat-btn").forEach(button => {

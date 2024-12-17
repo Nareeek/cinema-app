@@ -50,7 +50,7 @@
             </thead>
             <tbody id="summary-table"></tbody>
         </table>
-        <p>Total Price: <span id="total-price">0.00</span></p>
+        <p>Total Price: <span id="total-price">$0.00</span></p>
     </div>
 
     <!-- Email and Phone Section -->

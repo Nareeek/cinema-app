@@ -53,7 +53,7 @@
 }
 
 /* Confirm Payment Button */
-.confirm-btn {
+.confirm-payment-btn {
     margin-top: 15px;
     padding: 8px;
     font-size: 14px;
@@ -65,6 +65,34 @@
     cursor: pointer;
 }
 
-.confirm-btn:hover {
+button:disabled {
+    cursor: not-allowed; /* Show a "not-allowed" cursor on hover */
+    background-color: #d3d3d3; /* Light gray background to indicate it's disabled */
+    color: #888888; /* Dim the text color */
+    opacity: 0.6; /* Reduce opacity for a faded effect */
+    pointer-events: none; /* Disable hover effects */
+}
+
+.confirm-payment-btn:hover {
     background-color: #218838;
 }
+
+/* Seat badge for grouped seats */
+.seat-badge {
+    display: inline-block;
+    margin: 5px 10px;
+    padding: 6px 12px;
+    background-color: #e0e0e0; /* Light gray background */
+    color: #333; /* Darker text for contrast */
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* No seats selected message */
+.no-seats {
+    color: #666; /* Slightly darker gray */
+    font-style: italic;
+}
+

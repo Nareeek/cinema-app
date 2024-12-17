@@ -25,10 +25,20 @@ document.addEventListener("DOMContentLoaded", () => {
     let selectedPaymentMethod = null;
 
     // Display selected seats and total price
-    seatsElement.textContent =
-        selectedSeats.length > 0
-            ? selectedSeats.map((seat) => `Row ${seat.row}, Seat ${seat.seat}`).join(" | ")
-            : "No seats selected.";
+    const groupedSeats = selectedSeats.reduce((acc, seat) => {
+        // Group seats by rows
+        if (!acc[seat.row]) acc[seat.row] = [];
+        acc[seat.row].push(seat.seat);
+        return acc;
+    }, {});
+
+    // Generate the display text
+    seatsElement.innerHTML =
+        Object.keys(groupedSeats).length > 0
+            ? Object.entries(groupedSeats)
+                .map(([row, seats]) => `<span class="seat-badge">Row ${row} -> Seat ${seats.join(", ")}</span>`)
+                .join("")
+            : "<span class='no-seats'>No seats selected.</span>";
     totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
 
     // Disable the confirm button initially
