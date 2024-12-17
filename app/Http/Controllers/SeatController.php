@@ -33,7 +33,7 @@ class SeatController extends Controller
             'seat_id' => 'required|exists:seats,id',
             'user_email' => 'required|email',
             'user_phone' => 'required|string|min:10',
-            'status' => 'required|string|in:Pending,Confirmed',
+            'is_booked' => 'required|string|in:Pending,Confirmed',
         ]);
 
         // Ensure the schedule exists

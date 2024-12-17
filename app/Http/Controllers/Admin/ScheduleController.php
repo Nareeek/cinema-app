@@ -24,7 +24,7 @@ class ScheduleController extends Controller
             'movie_id' => 'required|exists:movies,id',
             'schedule_time' => 'required|date|after:now',
             'price' => 'required|numeric|min:0',
-            'status' => 'required|string|in:Active,Inactive',
+            'is_booked' => 'required|string|in:Active,Inactive',
         ]);
 
         // Check for overlapping schedules in the same room
