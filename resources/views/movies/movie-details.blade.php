@@ -7,7 +7,7 @@
 @endpush
 
 @push('scripts')
-<script src="{{ asset('js/movie-details.js') }}" defer></script>
+<script type="module" src="{{ asset('js/movie-details.js') }}" defer></script>
 @endpush
 
 @section('content')

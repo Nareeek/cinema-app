@@ -8,6 +8,7 @@
 
 @push('scripts')
 <script type="module" src="{{ asset('js/main.js') }}" defer></script>
+<script type="module" src="{{ asset('js/home-slideshow.js') }}" defer></script>
 @endpush
 
 @section('content')
@@ -15,11 +16,11 @@
     <!-- Top Section: Movie Slideshow -->
     <div class="slideshow">
         @foreach($movies as $movie)
-            <div class="slide">
+            <div class="slide" data-id="{{ $movie->id }}">
                 <img src="{{ asset('posters/' . $movie->poster_url) }}" 
                     alt="{{ $movie->title }}" 
-                    class="movie-image" 
-                    data-movie-id="{{ $movie->id }}">
+                    class="movie-image">
+                <div class="movie-title">{{ $movie->title }}</div>
             </div>
         @endforeach
     </div>
