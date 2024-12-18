@@ -22,6 +22,7 @@ Route::get('/movies/{movie}/rooms', [MovieController::class, 'getRoomsByDate']);
 
 
 Route::post('/check-seats', [BookingController::class, 'checkSeatAvailability'])->name('checkSeats');
+Route::post('/check-seats-before-payment', [PaymentController::class, 'checkSeatsBeforePayment'])->name('checkSeatsBeforePayment');
 
 
 Route::get('/rooms', [RoomController::class, 'index']);
