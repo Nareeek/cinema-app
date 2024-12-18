@@ -177,10 +177,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Handle continue button click
-    continueBtn.addEventListener("click", () => {
+    continueBtn.addEventListener("click", async () => {
         if (selectedSeats.length === 0 || !emailInput.value || !phoneInput.value) {
             alert("Please select seats and provide contact details.");
             return;
+        }
+
+        // Check seat availability before proceeding
+        const availabilityResponse = await checkSeatAvailability(selectedSeats);
+
+        if (!availabilityResponse.success) {
+            if (availabilityResponse.unavailable_seats) {
+                alert("Some seats are already booked. Please choose different seats.");
+                loadSeats(); // Reload seats to reflect the current state
+            } else {
+                alert(availabilityResponse.message);
+            }
+            return; // Stop further execution
         }
 
         // Redirect to payment page with booking data
@@ -208,6 +221,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("An error occurred while redirecting to the payment page. Please try again.");
             });
     });
+
+    function checkSeatAvailability(selectedSeats) {
+        return fetch('/check-seats', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: JSON.stringify({ selected_seats: selectedSeats.map(seat => seat.id) }),
+        })
+            .then(response => response.json())
+            .catch(error => {
+                console.error("Error checking seat availability:", error);
+                return { success: false, message: "An error occurred while checking seats." };
+            });
+    }
 
     // Attach input listeners for validation
     emailInput.addEventListener("input", validateForm);
