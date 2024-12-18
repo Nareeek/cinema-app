@@ -21,13 +21,13 @@
     <div id="booking-summary" class="summary-section">
         <h2>Booking Summary</h2>
         <p><strong>Seats:</strong> <span id="selected-seats">Loading...</span></p>
-        <p><strong>Total:</strong> $<span id="total-price">0.00</span></p>
+        <p><strong>Total:</strong> <span id="total-price">$0.00</span></p>
     </div>
     <div id="payment-methods" class="payment-methods-section">
         <div class="payment-method" data-method="credit_card">Credit Card</div>
         <div class="payment-method" data-method="paypal">PayPal</div>
         <div class="payment-method" data-method="cash">Cash</div>
     </div>
-    <button id="confirm-payment-btn" class="confirm-btn" disabled>Pay Now</button>
+    <button id="confirm-payment-btn" class="confirm-payment-btn" disabled>Pay Now</button>
 </div>
 @endsection

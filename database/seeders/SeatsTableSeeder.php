@@ -3,27 +3,36 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Schedule;
+use App\Models\Seat;
 
 class SeatsTableSeeder extends Seeder
 {
     public function run()
     {
-        $schedules = DB::table('schedules')->pluck('id');
-        $seats = [];
+        // Define rows and seats per row
+        $rowsPerSchedule = 5; // Adjust as needed
+        $seatsPerRow = 10; // Adjust as needed
+        $prices = range(10, 50); // Possible seat prices
 
-        foreach ($schedules as $scheduleId) {
-            $seatCount = rand(20, 100); // Random number of seats
-            for ($i = 1; $i <= $seatCount; $i++) {
-                $seats[] = [
-                    'schedule_id' => $scheduleId,
-                    'seat_number' => $i,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+        // Fetch all schedules
+        $schedules = Schedule::all();
+
+        foreach ($schedules as $schedule) {
+            for ($row = 1; $row <= $rowsPerSchedule; $row++) {
+                for ($seatNumber = 1; $seatNumber <= $seatsPerRow; $seatNumber++) {
+                    // Assign a random price for each seat
+                    $price = $prices[array_rand($prices)];
+
+                    Seat::create([
+                        'schedule_id' => $schedule->id,
+                        'seat_number' => $seatNumber, // Example: 1-6 Row 1
+                        'row_number' => $row, // Example: 1-6 Seat 6
+                        'price' => $price,
+                        'is_booked' => 0, // Default status
+                    ]);
+                }
             }
         }
-
-        DB::table('seats')->insert($seats);
     }
 }

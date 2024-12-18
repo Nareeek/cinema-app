@@ -65,19 +65,32 @@ class RoomController extends Controller
     {
         $day = $request->input('day', 'today');
         $date = $day === 'today' ? Carbon::today() : ($day === 'tomorrow' ? Carbon::tomorrow() : Carbon::parse($day));
+        $limit = $request->input('limit', null); // Limit parameter for pagination/testing
+
     
-        $schedules = Schedule::with('movie')
-        ->where('room_id', $roomId)
-        ->whereDate('schedule_time', $date)
-        ->get()
-        ->map(function ($schedule) {
-            return [
-                'id' => $schedule->movie->id,
-                'time' => $schedule->schedule_time ? Carbon::parse($schedule->schedule_time)->format('H:i') : 'N/A',
-                'title' => $schedule->movie ? $schedule->movie->title : 'N/A',
-                'price' => $schedule->price,
-            ];
-        });
+        $schedules = Schedule::with(['movie', 'seats'])
+            ->where('room_id', $roomId)
+            ->whereDate('schedule_time', $date)
+            ->get()
+            ->map(function ($schedule) {
+                // Calculate the minimum, average, or maximum price from related seats
+                $price = $schedule->seats->isEmpty()
+                    ? 'N/A'
+                    : $schedule->seats->min('price'); // Replace with 'avg' or 'max' if needed
+    
+                return [
+                    'id' => $schedule->movie->id ?? 'N/A',
+                    'time' => $schedule->schedule_time ? Carbon::parse($schedule->schedule_time)->format('H:i') : 'N/A',
+                    'title' => $schedule->movie ? $schedule->movie->title : 'N/A',
+                    'price' => $price,
+                ];
+            });
+        
+        // Apply the limit if provided
+        if ($limit) {
+            $schedules = $schedules->take($limit);
+        }
+
         return response()->json(['movies' => $schedules]);
     }
 }
