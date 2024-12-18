@@ -8,6 +8,9 @@ export function setActiveButton(day) {
     // Reset the date picker placeholder if "Today" or "Tomorrow" is selected
     const datePicker = document.querySelector('.date-picker');
     if (day === 'today' || day === 'tomorrow') {
+        if (datePicker?._flatpickr) {
+            datePicker._flatpickr.clear(); // Clear Flatpickr value explicitly
+        }
         datePicker.value = ''; // Clear date picker value
         datePicker.setAttribute('placeholder', 'Pick a date'); // Set placeholder back
     }
