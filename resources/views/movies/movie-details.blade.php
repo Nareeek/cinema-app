@@ -11,7 +11,9 @@
 @endpush
 
 @section('content')
-<div class="movie-details" data-movie-id="{{ $movie->id }}">
+<div class="movie-details" 
+     data-movie-id="{{ $movie->id }}" 
+     data-selected-date="{{ request()->query('date', 'today') }}">
     <!-- Movie Header -->
     <div class="movie-header">
         <img src="{{ asset('posters/' . $movie->poster_url) }}" alt="{{ $movie->title }}">
@@ -30,8 +32,9 @@
     <div class="schedule-section">
         <h2>Schedule</h2>
         <div class="filter-section">
-            <button id="today-button" class="filter-btn active" data-day="today" onclick="filterSchedule('today')">Today</button>
-            <button id="tomorrow-button" class="filter-btn" data-day="tomorrow" onclick="filterSchedule('tomorrow')">Tomorrow</button>            
+            <!-- Removed 'onclick' attributes -->
+            <button id="today-button" class="filter-btn active" data-day="today">Today</button>
+            <button id="tomorrow-button" class="filter-btn" data-day="tomorrow">Tomorrow</button>            
             <input type="text" id="date-picker" class="date-picker" placeholder="Pick a date">
         </div>
         <table class="schedule-table">

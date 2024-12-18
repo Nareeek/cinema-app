@@ -7,7 +7,7 @@
 @endpush
 
 @push('scripts')
-<script src="{{ asset('js/home.js') }}" defer></script>
+<script type="module" src="{{ asset('js/main.js') }}" defer></script>
 @endpush
 
 @section('content')
@@ -15,7 +15,7 @@
     <!-- Top Section: Movie Slideshow -->
     <div class="slideshow">
         @foreach($movies as $movie)
-            <div class="slide"> <!-- Add 'slide' class -->
+            <div class="slide">
                 <img src="{{ asset('posters/' . $movie->poster_url) }}" 
                     alt="{{ $movie->title }}" 
                     class="movie-image" 
@@ -25,22 +25,25 @@
     </div>
 
     <!-- Middle Section: Rooms List -->
-    <!-- Available Rooms Section -->
     <h2>Available Rooms</h2>
     <div class="room-container">
         @foreach ($rooms as $room)
-        <div class="room-card" data-room-id="{{ $room->id }}" onclick="toggleScheduled({{ $room->id }}, event)">
+        <div class="room-card" data-room-id="{{ $room->id }}">
+            <!-- Room Image and Name -->
             <img src="{{ $room->image_url ? asset('posters/' . $room->image_url) : asset('posters/default-room-image.jpg') }}" 
                 alt="{{ $room->name }}">
             <h3>{{ $room->name }}</h3>
 
             <!-- Collapsible Section for Schedule -->
             <div id="schedule-{{ $room->id }}" class="schedule-section" style="display: none;">
-                <div class="filter-section">
-                    <button class="filter-btn active" onclick="filterSchedule(event, {{ $room->id }}, 'today')">Today</button>
-                    <button class="filter-btn" onclick="filterSchedule(event, {{ $room->id }}, 'tomorrow')">Tomorrow</button>
+                <div class="filter-section" data-room-id="{{ $room->id }}">
+                    <!-- Filter Buttons -->
+                    <button class="filter-btn" data-room-id="{{ $room->id }}" data-day="today">Today</button>
+                    <button class="filter-btn" data-room-id="{{ $room->id }}" data-day="tomorrow">Tomorrow</button>
                     <input type="text" class="date-picker" placeholder="Pick a date" data-room-id="{{ $room->id }}">
                 </div>
+
+                <!-- Schedule Table -->
                 <table class="schedule-table">
                     <thead>
                         <tr>
@@ -50,17 +53,12 @@
                         </tr>
                     </thead>
                     <tbody id="schedule-body-{{ $room->id }}">
-                        <!-- Placeholder content; dynamically updated with JavaScript -->
-                        <tr>
-                            <td colspan="3" class="loading-text">Loading...</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <button id="view-more-{{ $room->id }}" class="view-more-btn" data-room-id="{{ $room->id }}">View More</button>
-                            </td>
-                        </tr>
+                        <!-- Schedule rows will be loaded here dynamically -->
                     </tbody>
                 </table>
+
+                <!-- View More Button -->
+                <button id="view-more-{{ $room->id }}" class="view-more-btn" data-room-id="{{ $room->id }}">View More</button>
             </div>
         </div>
         @endforeach
