@@ -58,5 +58,29 @@ class BookingController extends Controller
             return response()->json(['success' => false, 'message' => 'An error occurred while processing your request.'], 500);
         }
     }
+
+    public function checkSeatAvailability(Request $request)
+    {
+        $selectedSeats = $request->input('selected_seats', []);
+
+        if (empty($selectedSeats)) {
+            return response()->json(['success' => false, 'message' => 'No seats selected'], 400);
+        }
+
+        $unavailableSeats = Seat::whereIn('id', $selectedSeats)
+            ->where('is_booked', true)
+            ->pluck('id')
+            ->toArray();
+
+        if (!empty($unavailableSeats)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Some seats are already booked.',
+                'unavailable_seats' => $unavailableSeats
+            ], 200);
+        }
+
+        return response()->json(['success' => true, 'message' => 'All seats are available'], 200);
+    }
     
 }

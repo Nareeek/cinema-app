@@ -20,6 +20,11 @@ Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.detai
 Route::get('/movies/{id}/schedule', [MovieController::class, 'getSchedules']);
 Route::get('/movies/{movie}/rooms', [MovieController::class, 'getRoomsByDate']);
 
+
+Route::post('/check-seats', [BookingController::class, 'checkSeatAvailability'])->name('checkSeats');
+Route::post('/check-seats-before-payment', [PaymentController::class, 'checkSeatsBeforePayment'])->name('checkSeatsBeforePayment');
+
+
 Route::get('/rooms', [RoomController::class, 'index']);
 Route::get('/rooms/{id}/schedule', [RoomController::class, 'schedule']);
 

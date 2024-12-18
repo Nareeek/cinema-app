@@ -62,12 +62,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Handle payment confirmation
-    confirmPaymentBtn.addEventListener("click", () => {
+    confirmPaymentBtn.addEventListener("click", async () => {
         if (!selectedPaymentMethod) {
             alert("Please select a payment method.");
             return;
         }
 
+        // Check seat availability before proceeding with payment
+        const availabilityResponse = await checkSeatsBeforePayment(selectedSeats);
+
+        if (!availabilityResponse.success) {
+            if (availabilityResponse.unavailable_seats) {
+                alert("Some seats are already booked. You will be redirected to the booking page to choose different seats.");
+                const redirectScheduleId = availabilityResponse.schedule_id || scheduleId; // Use a new variable for clarity
+                window.location.href = `/bookings/${redirectScheduleId}`; // Redirect to the specific booking page
+            } else {
+                alert(availabilityResponse.message || "An error occurred while checking seat availability.");
+            }
+            return; // Stop further execution
+        }
+
+        // Proceed with payment
         fetch("/api/confirm-booking", {
             method: "POST",
             headers: {
@@ -100,4 +115,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("An error occurred. Please try again.");
             });
     });
+
+    function checkSeatsBeforePayment(selectedSeats) {
+        return fetch("/check-seats-before-payment", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: JSON.stringify({ selected_seats: selectedSeats.map(seat => seat.id) }),
+        })
+            .then(response => response.json())
+            .catch(error => {
+                console.error("Error checking seat availability:", error);
+                return { success: false, message: "An error occurred while checking seats." };
+            });
+    }
 });

@@ -79,5 +79,30 @@ class PaymentController extends Controller
         session()->forget(['scheduleId', 'selectedSeats', 'totalPrice']);
         return redirect()->route('payment.success');
     }
+
+    public function checkSeatsBeforePayment(Request $request)
+    {
+        $selectedSeats = $request->input('selected_seats', []);
+    
+        if (empty($selectedSeats)) {
+            return response()->json(['success' => false, 'message' => 'No seats selected'], 400);
+        }
+    
+        $unavailableSeats = Seat::whereIn('id', $selectedSeats)
+            ->where('is_booked', true)
+            ->pluck('id')
+            ->toArray();
+    
+        if (!empty($unavailableSeats)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Some seats are already booked.',
+                'unavailable_seats' => $unavailableSeats,
+                'schedule_id' => $request->input('schedule_id') // Include schedule_id in the response
+            ], 200);
+        }
+    
+        return response()->json(['success' => true, 'message' => 'All seats are available'], 200);
+    }    
     
 }
