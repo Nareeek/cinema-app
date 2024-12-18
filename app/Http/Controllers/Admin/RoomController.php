@@ -65,6 +65,8 @@ class RoomController extends Controller
     {
         $day = $request->input('day', 'today');
         $date = $day === 'today' ? Carbon::today() : ($day === 'tomorrow' ? Carbon::tomorrow() : Carbon::parse($day));
+        $limit = $request->input('limit', null); // Limit parameter for pagination/testing
+
     
         $schedules = Schedule::with(['movie', 'seats'])
             ->where('room_id', $roomId)
@@ -83,6 +85,12 @@ class RoomController extends Controller
                     'price' => $price,
                 ];
             });
+        
+        // Apply the limit if provided
+        if ($limit) {
+            $schedules = $schedules->take($limit);
+        }
+
         return response()->json(['movies' => $schedules]);
     }
 }
