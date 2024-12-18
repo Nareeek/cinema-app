@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Seat extends Model
 {
-    protected $fillable = ['room_id', 'row_number', 'seat_number'];
-
-    public function room()
-    {
-        return $this->belongsTo(Room::class);
-    }
+    protected $fillable = ['row_number', 'seat_number', 'is_booked']; // Include is_booked
 
     public function bookings()
     {
         return $this->hasOne(Booking::class);
+    }
+
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class);
     }
 }
