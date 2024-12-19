@@ -43,15 +43,11 @@ Route::post('/payment/process', [PaymentController::class, 'processPayment'])->n
 Route::get('/api/slideshow-images', [SlideshowController::class, 'getSlideshowImages']);
 
 // Admin routes
-Route::view('/admin/schedules', 'admin.schedules.index');
-Route::view('/admin/rooms', 'admin.rooms.index');
-Route::view('/admin/movies', 'admin.movies.index');
+// Route::view('/admin/schedules', 'admin.schedules.index');
+// Route::view('/admin/rooms', 'admin.rooms.index');
+// Route::view('/admin/movies', 'admin.movies.index');
 
-Route::get('/api/admin/movies', [MovieController::class, 'index']);
-Route::post('/api/admin/movies', [MovieController::class, 'store']);
-Route::get('/api/admin/movies/{id}', [MovieController::class, 'show']);
-Route::put('/api/admin/movies/{id}', [MovieController::class, 'update']);
-Route::delete('/api/admin/movies/{id}', [MovieController::class, 'destroy']);
+Route::get('/admin/movies', [MovieController::class, 'moviesPage'])->name('admin.movies.page');
 
 // Prevent Debugbar direct access in local environment
 if (app()->environment('local')) {
