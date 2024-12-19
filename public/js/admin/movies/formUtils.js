@@ -12,12 +12,15 @@ function setPopupTitle(title) {
 // Toggles the visibility of the popup
 function toggleMovieCard(isEditing = false) {
     const card = document.getElementById("add-movie-card");
+    const form = document.getElementById("add-movie-form");
+
     card.classList.toggle("hidden");
 
     if (card.classList.contains("hidden")) {
-        resetForm(); // Reset only when hiding
-    } else if (!isEditing) {
-        setPopupTitle("Add New Movie");
+        resetForm(); // Reset on hide
+    } else {
+        const editingId = form.dataset.editing;
+        setPopupTitle(editingId ? "Edit the Movie" : "Add New Movie");
     }
 }
 

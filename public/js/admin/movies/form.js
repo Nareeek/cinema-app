@@ -35,15 +35,24 @@ function posterPreview() {
     });
 }
 
-
 // Handles form submission for adding or editing a movie
+let isSubmitting = false; // Submission flag
+let shouldClosePopup = true; // Ensure popup doesn't reopen unintentionally
+
 function handleFormSubmission() {
     const form = document.getElementById("add-movie-form");
     const submitButton = form.querySelector(".btn-submit");
     const loadingOverlay = document.getElementById("loading-overlay");
 
+    // Ensure the form submission is bound only once
+    if (form.dataset.initialized) return; // Skip if already initialized
+    form.dataset.initialized = true;
+
     form.addEventListener("submit", function (e) {
         e.preventDefault();
+
+        if (isSubmitting) return; // Prevent duplicate submissions
+        isSubmitting = true;
 
         const formData = new FormData(this);
         const data = Object.fromEntries(formData.entries());
@@ -58,6 +67,7 @@ function handleFormSubmission() {
 
         if (!isFormValid) {
             alert("Please ensure all fields are valid before submitting.");
+            isSubmitting = false; // Reset submission flag
             return;
         }
 
@@ -74,27 +84,30 @@ function handleFormSubmission() {
             headers: { "Content-Type": "application/json", "Accept": "application/json" },
             body: JSON.stringify(data),
         })
-        .then((response) => {
-            if (!response.ok) {
-                return response.json().then((err) => Promise.reject(err));
-            }
-            alert(editingId ? "Movie updated successfully!" : "Movie added successfully!");
-            toggleMovieCard(false); // Close popup
-            loadMovies(); // Refresh table
-        })
-        .catch((error) => {
-            console.error("Error saving movie:", error);
-            alert("Failed to save movie.");
-        })
-        .finally(() => {
-            loadingOverlay.classList.remove("show");
-            submitButton.disabled = false;
-        });
+            .then((response) => {
+                if (!response.ok) {
+                    return response.json().then((err) => Promise.reject(err));
+                }
+                alert(editingId ? "Movie updated successfully!" : "Movie added successfully!");
+                shouldClosePopup = true; // Mark popup for closing
+                loadMovies(); // Refresh table
+            })
+            .catch((error) => {
+                console.error("Error saving movie:", error);
+                alert("Failed to save movie.");
+            })
+            .finally(() => {
+                if (shouldClosePopup) {
+                    toggleMovieCard(false); // Close popup only if needed
+                }
+                loadingOverlay.classList.remove("show");
+                submitButton.disabled = false;
+                isSubmitting = false; // Reset submission flag
+            });
     });
 }
 
-
-
+// Dynamically validates poster URL and updates preview
 function initializeDynamicValidation() {
     const posterInput = document.getElementById("poster_url");
     posterInput.addEventListener("input", () => {
@@ -110,7 +123,7 @@ function initializeDynamicValidation() {
     });
 }
 
-
+// Dynamically toggles the submit button state based on form validity
 function toggleSubmitButton() {
     const form = document.getElementById("add-movie-form");
     const submitButton = form.querySelector(".btn-submit");
@@ -120,6 +133,5 @@ function toggleSubmitButton() {
     submitButton.disabled = !isFormValid; // Disable if invalid
 }
 
-
 // Export the functions
-export { handleFormSubmission, posterPreview, initializeDynamicValidation };
+export { handleFormSubmission, posterPreview, initializeDynamicValidation, toggleSubmitButton };

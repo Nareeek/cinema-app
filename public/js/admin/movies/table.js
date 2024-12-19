@@ -1,25 +1,30 @@
-import { toggleMovieCard, setPopupTitle } from "./formUtils.js";
+import { toggleMovieCard } from "./formUtils.js";
 import { showPosterPreview } from "./utils.js";
 import { fetchMovies, fetchMovieDetails } from "./api.js";
 
 let currentPage = 1; // Track the current page globally
+let isLoadingMovies = false; // Prevent duplicate loads
 
-// Load movies and handle rendering
 function loadMovies(page = 1) {
-    if (page === 1) currentPage = 1; // Reset currentPage on fresh load
+    if (isLoadingMovies) return; // Skip if already loading
+    isLoadingMovies = true;
 
+    console.log("Loading movies for page:", page);
     fetchMovies(page)
         .then((data) => {
+            console.log("Movies data fetched:", data);
             renderMovies(data, page); // Render the movies into the table
-            handlePagination(data);   // Handle pagination ("View More" button)
+            handlePagination(data); // Handle pagination ("View More" button)
         })
         .catch((error) => {
             console.error("Error loading movies:", error);
             alert("Failed to load movies.");
+        })
+        .finally(() => {
+            isLoadingMovies = false; // Reset loading state
         });
 }
 
-// Render movies into the table
 function renderMovies(data, page) {
     console.log("Movies data:", data);
     const tbody = document.getElementById("movies-table-body");
@@ -42,7 +47,6 @@ function renderMovies(data, page) {
     });
 }
 
-// Handle pagination for the movie table
 function handlePagination(data) {
     const viewMoreButton = document.getElementById("view-more");
 
@@ -51,24 +55,19 @@ function handlePagination(data) {
         return; // Exit the function if the button is not present
     }
 
-    // Remove any existing click listeners to prevent duplication
-    viewMoreButton.replaceWith(viewMoreButton.cloneNode(true)); 
-    const newViewMoreButton = document.getElementById("view-more");
-
     // Check if more pages are available
     if (data.next_page_url) {
-        newViewMoreButton.style.display = "block";
-        newViewMoreButton.addEventListener("click", () => {
+        viewMoreButton.style.display = "block";
+        viewMoreButton.onclick = () => {
             currentPage++;
             loadMovies(currentPage); // Load the next page of movies
-        });
+        };
     } else {
-        newViewMoreButton.style.display = "none";
+        viewMoreButton.style.display = "none";
     }
 }
 
-
-// Delete a movie by ID
+// Deletes a movie by ID
 function deleteMovie(id) {
     fetch(`/api/admin/movies/${id}`, {
         method: "DELETE",
@@ -79,27 +78,25 @@ function deleteMovie(id) {
         .then((response) => {
             if (response.ok) {
                 alert("Movie deleted successfully!");
-                loadMovies(); // Reload the movies table
+                loadMovies(); // Reload movies after deletion
             } else {
-                return response.json().then((error) => {
-                    console.error("Error deleting movie:", error);
-                    alert("Failed to delete movie.");
-                });
+                alert("Failed to delete movie.");
             }
         })
         .catch((error) => {
             console.error("Error deleting movie:", error);
-            alert("Failed to delete movie.");
+            alert("Error deleting movie.");
         });
 }
 
-// Edit a movie by ID
+// Handles editing a movie
 function editMovie(id) {
     fetchMovieDetails(id)
         .then((movie) => {
-            toggleMovieCard(true); // Open popup for editing
-            populateForm(movie); // Populate the form with movie data
-            setFormToEditMode(id); // Set the form to editing mode
+            console.log("Movie data being populated:", movie);
+            toggleMovieCard(true); // Open the popup and set the title for editing
+            populateForm(movie); // Populate the form with movie details
+            setFormToEditMode(id); // Enable editing mode
         })
         .catch((error) => {
             console.error("Error fetching movie details:", error);
@@ -107,85 +104,32 @@ function editMovie(id) {
         });
 }
 
-// Populate the form with movie data
+// Populates the form with movie data for editing
 function populateForm(movie) {
-    console.log("Movie data being populated:", movie); // Log movie data
+    const form = document.getElementById("add-movie-form");
 
     document.getElementById("title").value = movie.title;
     document.getElementById("description").value = movie.description || "";
-    document.getElementById("poster_url").value =
-        movie.poster_url.startsWith("/") || movie.poster_url.startsWith("http")
-            ? movie.poster_url
-            : `${window.location.origin}/posters/${movie.poster_url}`;
+    document.getElementById("poster_url").value = movie.poster_url;
     document.getElementById("trailer_url").value = movie.trailer_url || "";
     document.getElementById("duration").value = movie.duration;
 
-    showPosterPreview(movie.poster_url); // Log is already inside showPosterPreview
+    // Show poster preview with corrected URL
+    showPosterPreview(movie.poster_url);
 }
 
-
-// Set the form to editing mode
 function setFormToEditMode(id) {
     const form = document.getElementById("add-movie-form");
     form.dataset.editing = id; // Set editing mode
     document.querySelector(".btn-submit").textContent = "Save Changes"; // Update button text
-
-    // Remove any existing event listeners to avoid duplicate triggers
-    form.onsubmit = null;
-
-    // Attach a single update handler
-    form.onsubmit = function (e) {
-        e.preventDefault(); // Prevent default form submission
-        handleUpdateMovie(id); // Save changes
-    };
 }
-
-
-// Handle updating a movie
-function handleUpdateMovie(id) {
-    const form = document.getElementById("add-movie-form");
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-
-    // Validate movie duration
-    const duration = parseInt(data.duration, 10);
-    if (duration < 40 || duration > 300) {
-        alert("Movie duration must be between 40 and 300 minutes.");
-        return;
-    }
-
-    fetch(`/api/admin/movies/${id}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        },
-        body: JSON.stringify(data), // Send updated movie data
-    })
-        .then((response) => {
-            if (response.ok) {
-                alert("Movie updated successfully!");
-                toggleMovieCard(); // Close the popup
-                loadMovies(); // Refresh the movies table
-            } else {
-                return response.json().then((errorData) => {
-                    console.error("Error updating movie:", errorData);
-                    alert("Failed to update movie: " + (errorData.message || "Unknown error"));
-                });
-            }
-        })
-        .catch((error) => {
-            console.error("Error updating movie:", error);
-            alert("Failed to update movie.");
-        });
-}
-
 
 function initializeTableEventListeners() {
     const viewMoreButton = document.getElementById("view-more");
     if (viewMoreButton) {
         viewMoreButton.addEventListener("click", () => {
-            loadMovies(); // Load the next page of movies
+            currentPage++;
+            loadMovies(currentPage);
         });
     }
 }
