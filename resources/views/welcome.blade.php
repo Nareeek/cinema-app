@@ -17,7 +17,7 @@
     <div class="slideshow">
         @foreach($movies as $movie)
             <div class="slide" data-id="{{ $movie->id }}">
-                <img src="{{ asset('posters/' . $movie->poster_url) }}" 
+                <img src="{{ asset('/storage/posters/' . $movie->poster_url) }}" 
                     alt="{{ $movie->title }}" 
                     class="movie-image">
                 <div class="movie-title">{{ $movie->title }}</div>
@@ -31,7 +31,7 @@
         @foreach ($rooms as $room)
         <div class="room-card" data-room-id="{{ $room->id }}">
             <!-- Room Image and Name -->
-            <img src="{{ $room->image_url ? asset('posters/' . $room->image_url) : asset('posters/default-room-image.jpg') }}" 
+            <img src="{{ $room->image_url ? asset('/storage/posters/' . $room->image_url) : asset('/storage/posters/default-room-image.jpg') }}" 
                 alt="{{ $room->name }}">
             <h3>{{ $room->name }}</h3>
 
