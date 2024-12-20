@@ -26,12 +26,21 @@
         <form id="add-movie-form">
             <img id="poster-preview" style="display: none; max-width: 100%; margin-top: 10px;" alt="Poster Preview">
             <input type="text" id="poster_url" name="poster_url" placeholder="Poster URL" required>
+            <label for="poster_file">Upload Poster</label>
+            <input type="file" id="poster_file" name="poster_file" accept="image/*">
             <input type="text" id="title" name="title" placeholder="Movie Title" required>
             <textarea id="description" name="description" placeholder="Description"></textarea>
             <input type="text" id="trailer_url" name="trailer_url" placeholder="Trailer URL">
             <input type="number" id="duration" name="duration" placeholder="Duration (minutes)" required>
             <button type="submit" class="btn-submit">Add Movie</button>
         </form>
+    </div>
+
+    {{-- delete confirmation popup --}}
+    <div id="delete-confirm-popup" class="hidden">
+        <p>Do you really want to delete this movie?</p>
+        <button id="confirm-delete">Yes</button>
+        <button id="cancel-delete">No</button>
     </div>
 
     <!-- Movie Table -->
@@ -41,6 +50,7 @@
             <tr>
                 <th>ID</th>
                 <th>Title</th>
+                <th>Description</th>
                 <th>Duration</th>
                 <th>Actions</th>
             </tr>

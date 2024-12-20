@@ -2,8 +2,18 @@ import { toggleMovieCard } from "./formUtils.js";
 import { showPosterPreview } from "./utils.js";
 import { fetchMovies, fetchMovieDetails } from "./api.js";
 
-let currentPage = 1; // Track the current page globally
+
 let isLoadingMovies = false; // Prevent duplicate loads
+let currentPage = 1; // Track the current page globally
+
+export function getCurrentPage() {
+    return currentPage;
+}
+
+export function setCurrentPage(page) {
+    currentPage = page; // Update the value
+}
+
 
 function loadMovies(page = 1) {
     if (isLoadingMovies) return; // Skip if already loading
@@ -37,6 +47,7 @@ function renderMovies(data, page) {
         row.innerHTML = `
             <td>${movie.id}</td>
             <td>${movie.title}</td>
+            <td>${movie.description || "No description available"}</td> <!-- New Column -->
             <td>${movie.duration} min</td>
             <td>
                 <button class="btn-edit" onclick="editMovie(${movie.id})">✏ Edit</button>
@@ -56,37 +67,59 @@ function handlePagination(data) {
     }
 
     // Check if more pages are available
-    if (data.next_page_url) {
+     currentPage = data.current_page;
+    const lastPage = data.last_page;
+
+    if (!currentPage || !lastPage) {
+        alert("Current or last page not found in the data.");
+        console.warn("Current or last page not found in the data.");
+    }
+
+    if (currentPage < lastPage) {
         viewMoreButton.style.display = "block";
         viewMoreButton.onclick = () => {
-            currentPage++;
+            currentPage++; // Increment the page
             loadMovies(currentPage); // Load the next page of movies
         };
     } else {
-        viewMoreButton.style.display = "none";
+        viewMoreButton.style.display = "none"; // Hide the button if no more pages
     }
 }
 
 // Deletes a movie by ID
 function deleteMovie(id) {
-    fetch(`/api/admin/movies/${id}`, {
-        method: "DELETE",
-        headers: {
-            "Accept": "application/json",
-        },
-    })
-        .then((response) => {
-            if (response.ok) {
-                alert("Movie deleted successfully!");
-                loadMovies(); // Reload movies after deletion
-            } else {
-                alert("Failed to delete movie.");
-            }
+    const popup = document.getElementById("delete-confirm-popup");
+    const confirmButton = document.getElementById("confirm-delete");
+    const cancelButton = document.getElementById("cancel-delete");
+
+    popup.classList.remove("hidden");
+
+    confirmButton.onclick = () => {
+        popup.classList.add("hidden");
+        fetch(`/api/admin/movies/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Accept": "application/json",
+            },
         })
-        .catch((error) => {
-            console.error("Error deleting movie:", error);
-            alert("Error deleting movie.");
-        });
+            .then((response) => {
+                if (response.ok) {
+                    alert("Movie deleted successfully!");
+                    currentPage = 1; // Reset pagination
+                    loadMovies(); // Reload movies
+                } else {
+                    alert("Failed to delete movie.");
+                }
+            })
+            .catch((error) => {
+                console.error("Error deleting movie:", error);
+                alert("Error deleting movie.");
+            });
+    };
+
+    cancelButton.onclick = () => {
+        popup.classList.add("hidden");
+    };
 }
 
 // Handles editing a movie
@@ -107,15 +140,34 @@ function editMovie(id) {
 // Populates the form with movie data for editing
 function populateForm(movie) {
     const form = document.getElementById("add-movie-form");
+    const posterInput = document.getElementById("poster_url");
+    const posterPreview = document.getElementById("poster-preview");
+    const posterFileInput = document.getElementById("poster_file");
 
-    document.getElementById("title").value = movie.title;
-    document.getElementById("description").value = movie.description || "";
-    document.getElementById("poster_url").value = movie.poster_url;
-    document.getElementById("trailer_url").value = movie.trailer_url || "";
-    document.getElementById("duration").value = movie.duration;
+    form.reset();
 
-    // Show poster preview with corrected URL
-    showPosterPreview(movie.poster_url);
+    // Populate fields
+    form.title.value = movie.title || "";
+    form.description.value = movie.description || "";
+    form.trailer_url.value = movie.trailer_url || "";
+    form.duration.value = movie.duration || "";
+
+    // Handle poster_url and preview
+    if (movie.poster_url) {
+        const fullURL = movie.poster_url.startsWith("/storage/")
+            ? `${window.location.origin}${movie.poster_url}`
+            : `${window.location.origin}/${movie.poster_url}`;
+
+        posterInput.value = fullURL;
+        posterPreview.src = fullURL;
+        posterPreview.style.display = "block";
+    } else {
+        posterInput.value = "";
+        posterPreview.style.display = "none";
+    }
+
+    // Reset file input
+    posterFileInput.value = "";
 }
 
 function setFormToEditMode(id) {

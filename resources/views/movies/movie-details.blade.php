@@ -16,7 +16,7 @@
      data-selected-date="{{ request()->query('date', 'today') }}">
     <!-- Movie Header -->
     <div class="movie-header">
-        <img src="{{ asset('storage/posters/' . $movie->poster_url) }}" alt="{{ $movie->title }}">
+        <img src="{{ asset($movie->poster_url) }}" alt="{{ $movie->title }}">
         <div class="movie-header-content">
             <h1 class="movie-title">{{ $movie->title }}</h1>
             <p class="movie-description">{{ $movie->description }}</p>

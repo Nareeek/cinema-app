@@ -24,14 +24,16 @@ class MovieRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'poster_url' => ['required', 'regex:/^(https?:\/\/|\/).+\.(jpg|jpeg|png|gif|webp)$/i'],
             'trailer_url' => 'nullable|url',
-            'duration' => 'required|integer|min:1|max:300', // Added max limit
+            'duration' => 'required|integer|min:1',
+            'poster_url' => 'nullable|url',
+            'poster_file' => 'nullable|file|mimes:jpeg,png,jpg,webp|max:5120', // Allow up to 5MB
         ];
     }
 
-    public function passedValidation()
+    public function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-        \Log::info('Validated Data:', $this->validated());
+        \Log::error('Validation Failed:', $validator->errors()->toArray());
+        parent::failedValidation($validator);
     }
 }

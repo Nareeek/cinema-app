@@ -10,24 +10,34 @@ function setPopupTitle(title) {
 }
 
 // Toggles the visibility of the popup
-function toggleMovieCard(isEditing = false) {
+function toggleMovieCard(isEdit = false, movieTitle = '') {
     const card = document.getElementById("add-movie-card");
     const form = document.getElementById("add-movie-form");
 
+    // Toggle the visibility of the card
     card.classList.toggle("hidden");
 
     if (card.classList.contains("hidden")) {
-        resetForm(); // Reset on hide
+        // If hiding the form, reset it
+        resetForm();
     } else {
-        const editingId = form.dataset.editing;
-        setPopupTitle(editingId ? "Edit the Movie" : "Add New Movie");
+        // If showing the form, set the title dynamically
+        if (isEdit) {
+            form.dataset.editing = true; // Set editing state
+            setPopupTitle("Edit the Movie"); // Edit mode title
+            document.querySelector(".btn-submit").textContent = "Save Changes"; // Update button text
+        } else {
+            form.dataset.editing = ""; // Clear editing state
+            setPopupTitle("Add New Movie"); // Add mode title
+            document.querySelector(".btn-submit").textContent = "Add Movie"; // Reset button text
+        }
     }
 }
 
 // Resets the form
 function resetForm() {
     const form = document.getElementById("add-movie-form");
-    form.reset();
+    form.reset(); // Reset all form fields
     form.dataset.editing = ""; // Clear editing state
     document.querySelector(".btn-submit").textContent = "Add Movie"; // Reset button text
     document.getElementById("poster-preview").style.display = "none"; // Hide poster preview

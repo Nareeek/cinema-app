@@ -25,18 +25,45 @@ h1 {
     border-collapse: collapse;
     margin: 20px 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .movie-table th,
 .movie-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: top;
+}
+
+.movie-table td {
     text-align: left;
     padding: 10px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 2px solid #e0e0e0;
+    border-right: 1px solid #ddd;
+    position: relative; /* Required for tooltip */
+}
+
+.movie-table th:last-child, 
+.movie-table td:last-child {
+    width: 150px;
+    text-align: center;
 }
 
 .movie-table th {
     background-color: var(--primary-color);
     color: white;
+    white-space: nowrap; /* Keep headers on one line */
+}
+
+
+.movie-table td:nth-child(2), /* Title column */
+.movie-table td:nth-child(3)  /* Description column */ {
+    max-width: 200px;
+    word-wrap: break-word; /* Break long words */
+    overflow-wrap: break-word;
 }
 
 .movie-table tr:hover {
@@ -59,6 +86,7 @@ h1 {
 
 .btn-add-movie:hover {
     background-color: var(--hover-color);
+    transform: scale(1.05);
 }
 
 .movie-card {
@@ -173,4 +201,63 @@ textarea:focus {
 
 #loading-overlay.show {
     display: flex;
+}
+
+.btn-edit:hover, .btn-delete:hover {
+    background-color: #d3d3d3;
+    color: #000; 
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+}
+
+.btn-edit {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.btn-delete {
+    background-color: #c46f69;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+/* Style the View More button */
+#view-more {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 24px;
+    font-size: 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#view-more:hover {
+    background-color: var(--hover-color);
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+#delete-confirm-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#delete-confirm-popup.hidden {
+    display: none;
 }
