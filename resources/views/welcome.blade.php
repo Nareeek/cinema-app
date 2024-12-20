@@ -17,7 +17,7 @@
     <div class="slideshow">
         @foreach($movies as $movie)
             <div class="slide" data-id="{{ $movie->id }}">
-                <img src="{{ asset('/storage/posters/' . $movie->poster_url) }}" 
+                <img src="{{ asset($movie->poster_url) }}" 
                     alt="{{ $movie->title }}" 
                     class="movie-image">
                 <div class="movie-title">{{ $movie->title }}</div>

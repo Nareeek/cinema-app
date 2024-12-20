@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
             row.innerHTML = `
                 <td>${seat.row}</td>
                 <td>${seat.seat}</td>
-                <td>${seat.price.toFixed(2)}</td>
+                <td>${seat.price.toFixed(2)}$</td>
                 <td><button class="remove-seat-btn" data-id="${seat.id}">X</button></td>
             `;
             summaryTable.appendChild(row);
