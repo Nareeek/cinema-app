@@ -1,7 +1,7 @@
-import { initializeFlatpickr } from './flatpickr-init.js';
-import { fetchData } from './fetch-utils.js';
-import { setActiveButton } from './button-utils.js';
-import { fetchSchedule, fetchRoomsForMovie } from './fetch-movie-data.js';
+import { initializeFlatpickr } from './movies/flatpickr-init.js';
+import { fetchData } from './movies/fetch-utils.js';
+import { setActiveButton } from './movies/button-utils.js';
+import { fetchSchedule, fetchRoomsForMovie } from './movies/fetch-movie-data.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements

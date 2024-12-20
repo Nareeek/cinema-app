@@ -15,7 +15,7 @@
     <header>
         <nav>
             <div class="logo">
-                <a href="/">
+                <a href="{{ route('home') }}">
                     <img src="{{ asset('/storage/posters/logo.jpg') }}" alt="Cinema App Logo", height="40", width="50">
                 </a>
             </div>
@@ -26,7 +26,13 @@
                 <button onclick="changeLanguage('en')">EN</button>
                 <button onclick="changeLanguage('ru')">RU</button>
                 <button onclick="changeLanguage('am')">AM</button>
+                <a href="{{ route('admin.movies.page') }}">Admin Panel</a>
             </div>
+            @auth
+            @if(auth()->user()->is_admin) <!-- Assuming is_admin is a boolean field -->
+                <li><a href="{{ route('movies.management') }}">Movie Management</a></li>
+            @endif
+        @endauth
         </div>
     </header>
     
