@@ -41,6 +41,7 @@
             <tr>
                 <th>ID</th>
                 <th>Title</th>
+                <th>Description</th>
                 <th>Duration</th>
                 <th>Actions</th>
             </tr>

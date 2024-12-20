@@ -37,6 +37,7 @@ function renderMovies(data, page) {
         row.innerHTML = `
             <td>${movie.id}</td>
             <td>${movie.title}</td>
+            <td>${movie.description || "No description available"}</td> <!-- New Column -->
             <td>${movie.duration} min</td>
             <td>
                 <button class="btn-edit" onclick="editMovie(${movie.id})">✏ Edit</button>
