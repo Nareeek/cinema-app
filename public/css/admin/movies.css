@@ -32,10 +32,18 @@ h1 {
 
 .movie-table th,
 .movie-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: top;
+}
+
+.movie-table td {
     text-align: left;
     padding: 10px;
     border-bottom: 2px solid #e0e0e0;
     border-right: 1px solid #ddd;
+    position: relative; /* Required for tooltip */
 }
 
 .movie-table th:last-child, 
@@ -47,6 +55,15 @@ h1 {
 .movie-table th {
     background-color: var(--primary-color);
     color: white;
+    white-space: nowrap; /* Keep headers on one line */
+}
+
+
+.movie-table td:nth-child(2), /* Title column */
+.movie-table td:nth-child(3)  /* Description column */ {
+    max-width: 200px;
+    word-wrap: break-word; /* Break long words */
+    overflow-wrap: break-word;
 }
 
 .movie-table tr:hover {
@@ -226,4 +243,21 @@ textarea:focus {
 #view-more:hover {
     background-color: var(--hover-color);
     transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+#delete-confirm-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#delete-confirm-popup.hidden {
+    display: none;
 }

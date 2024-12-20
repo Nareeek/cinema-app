@@ -31,6 +31,10 @@ Route::get('/movies', [MovieController::class, 'index']); // List all movies
 Route::get('/movies/{id}', [MovieController::class, 'show']); // Movie details with schedules
 
 
+Route::middleware(['api', 'force.json'])->prefix('api/admin')->group(function () {
+    Route::apiResource('movies', MovieController::class);
+});
+
 // Room CRUD API routes
 Route::prefix('admin')->group(function () {
     Route::get('/rooms', [RoomController::class, 'index']); // List rooms
