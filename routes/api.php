@@ -42,9 +42,9 @@ Route::prefix('admin')->group(function () {
 
 // Movie CRUD API routes
 Route::prefix('admin')->group(function () {
-    Route::get('/movies', [MovieController::class, 'index']); // List movies
+    Route::get('/movies', [MovieController::class, 'index'])->name('admin.movies.index'); // List movies
     Route::post('/movies', [MovieController::class, 'store']); // Create movie
-    Route::get('/movies/{id}', [MovieController::class, 'show']); // Get movie details
+    Route::get('/movies/{id}', [MovieController::class, 'apiShow']); // Get movie details
     Route::put('/movies/{id}', [MovieController::class, 'update']); // Update movie
     Route::delete('/movies/{id}', [MovieController::class, 'destroy']); // Delete movie
 });
