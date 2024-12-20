@@ -92,6 +92,9 @@ function deleteMovie(id) {
     const confirmButton = document.getElementById("confirm-delete");
     const cancelButton = document.getElementById("cancel-delete");
 
+     // Get the CSRF token from the meta tag in the HTML head
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
     popup.classList.remove("hidden");
 
     confirmButton.onclick = () => {
@@ -100,6 +103,8 @@ function deleteMovie(id) {
             method: "DELETE",
             headers: {
                 "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken, // Include the CSRF token in the headers
             },
         })
             .then((response) => {
