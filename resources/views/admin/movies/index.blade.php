@@ -29,7 +29,7 @@
             <label for="poster_file">Upload Poster</label>
             <input type="file" id="poster_file" name="poster_file" accept="image/*">
             <input type="text" id="title" name="title" placeholder="Movie Title" required>
-            <textarea id="description" name="description" placeholder="Description"></textarea>
+            <textarea id="description" name="description" placeholder="Description" required></textarea>
             <input type="text" id="trailer_url" name="trailer_url" placeholder="Trailer URL">
             <input type="number" id="duration" name="duration" placeholder="Duration (minutes)" required>
             <button type="submit" class="btn-submit">Add Movie</button>
