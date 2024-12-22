@@ -20,7 +20,6 @@
                 <img src="{{ asset($movie->poster_url) }}" 
                     alt="{{ $movie->title }}" 
                     class="movie-image">
-                <div class="movie-title">{{ $movie->title }}</div>
             </div>
         @endforeach
     </div>
