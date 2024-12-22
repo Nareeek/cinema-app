@@ -19,7 +19,13 @@
         <img src="{{ asset($movie->poster_url) }}" alt="{{ $movie->title }}">
         <div class="movie-header-content">
             <h1 class="movie-title">{{ $movie->title }}</h1>
-            <p class="movie-description">{{ $movie->description }}</p>
+            <button id="read-more-less-button">Read more</button>
+            <span id="dots">
+                {{ substr($movie->description, 0, 1200) }}
+            </span>
+            <span id="show-more" class="movie-description">
+                {{ $movie->description }}
+            </span>
             <p class="movie-info"><strong>Duration:</strong> {{ $movie->duration }} mins</p>
             <p class="movie-info"><a href="{{ $movie->trailer_url }}" target="_blank">Watch Trailer</a></p>
         </div>

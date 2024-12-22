@@ -16,6 +16,7 @@
 }
 .movie-header img {
     max-width: 40%;
+    max-height: fit-content;
     height: auto;
     border-radius: 10px;
 }
@@ -32,7 +33,18 @@
 .movie-description {
     font-size: 16px;
     margin-bottom: 10px;
+    word-break: break-word;
 }
+
+#show-more {
+    display: none;
+}
+
+#dots {
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
 .movie-info {
     font-size: 14px;
     margin-bottom: 10px;
