@@ -9,6 +9,7 @@ use App\Models\Room;
 use App\Models\Schedule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class MovieController extends Controller
@@ -16,6 +17,11 @@ class MovieController extends Controller
     // List all movies (for admin panel)
     public function index()
     {
+        // Ensure the user is authenticated and an admin
+        if (!Auth::check() || !Auth::user()->is_admin) {
+            abort(403, 'Unauthorized'); // Return a 403 error if not an admin
+        }
+
         $movies = Movie::paginate(10); // Return 10 movies per page
         return response()->json($movies);
     }
