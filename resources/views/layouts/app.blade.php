@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cinema App - @yield('title', 'Home')</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -26,13 +28,20 @@
                 <button onclick="changeLanguage('en')">EN</button>
                 <button onclick="changeLanguage('ru')">RU</button>
                 <button onclick="changeLanguage('am')">AM</button>
-                <a href="{{ route('admin.movies.page') }}">Admin Panel</a>
-            </div>
             @auth
-            @if(auth()->user()->is_admin) <!-- Assuming is_admin is a boolean field -->
-                <li><a href="{{ route('movies.management') }}">Movie Management</a></li>
-            @endif
-        @endauth
+                @if(auth()->user()->is_admin)
+                    <a href="{{ route('admin.movies.page') }}" class="admin-panel-link">Admin Panel</a>
+                @endif
+                    <!-- Add a logout button -->
+                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                    <span class="user-name">Hello, {{ auth()->user()->name }}</span> 
+                @else
+                    <a href="{{ route('login') }}" class="login-link">Login</a>
+                    <a href="{{ route('register') }}" class="register-link">Register</a>
+            @endauth
         </div>
     </header>
     

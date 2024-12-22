@@ -14,12 +14,14 @@ class UsersTableSeeder extends Seeder
             'name' => 'Admin User',
             'email' => 'admin@example.com',
             'password' => Hash::make('password'),
+            'is_admin' => true, // Set is_admin to true
         ]);
-
+        
         User::create([
             'name' => 'Test User',
             'email' => 'user@example.com',
             'password' => Hash::make('password'),
+            'is_admin' => false, // Set is_admin to false
         ]);
 
         $this->command->info("Users seeded successfully!");

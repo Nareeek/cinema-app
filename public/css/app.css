@@ -62,4 +62,37 @@ header .logo img {
     cursor: pointer;
 }
 
-  
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.language-selector .user-name {
+  font-weight: bold;
+  color: #51f050;
+}
+
+.language-selector .logout-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.language-selector .login-link,
+.language-selector .register-link,
+.admin-panel-link, .logout-btn {
+  text-decoration: none;
+  color: #007bff;
+  margin-left: 10px;
+}
+
+.language-selector .logout-btn:hover,
+.language-selector .login-link:hover,
+.language-selector .register-link:hover,
+.admin-panel-link {
+  color: #0056b3;
+}
