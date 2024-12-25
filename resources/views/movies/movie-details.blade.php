@@ -13,7 +13,13 @@
 @section('content')
 <div class="movie-details" 
      data-movie-id="{{ $movie->id }}" 
-     data-selected-date="{{ request()->query('date', 'today') }}">
+     data-selected-date="{{ request()->query('date', 'today') }}"
+    @if(auth()->check())
+        data-logged-in='true'
+    @else
+        data-logged-in="false"
+    @endif
+     data-login-url="{{ route('login') }}">
     <!-- Movie Header -->
     <div class="movie-header">
         <img src="{{ asset($movie->poster_url) }}" alt="{{ $movie->title }}">

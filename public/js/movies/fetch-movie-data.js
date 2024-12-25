@@ -1,5 +1,10 @@
 import { fetchData } from './fetch-utils.js';
 
+const moviePage = document.querySelector('.movie-details');
+const isLoggedIn = moviePage?.dataset.loggedIn === 'true';
+const loginUrl = moviePage?.dataset.loginUrl;
+
+
 export function fetchSchedule(movieId, scheduleBody, dayOrDate) {
     scheduleBody.innerHTML = '<tr><td colspan="4" class="loading-text">Loading...</td></tr>';
 
@@ -16,7 +21,10 @@ export function fetchSchedule(movieId, scheduleBody, dayOrDate) {
                         <td>${schedule.room || 'N/A'}</td>
                         <td>${schedule.price ? `${schedule.price}$` : 'N/A'}</td>
                         <td>
-                            <button class="action-btn book-btn" onclick="window.location.href='/bookings/${schedule.id}'">Book</button>
+                            ${isLoggedIn
+                            ? `<button class="action-btn book-btn" onclick="window.location.href='/bookings/${schedule.id}'">Book</button>`
+                            : `<a href="${loginUrl}" class="action-link">Log in to book</a>`
+                            }
                         </td>
                     </tr>
                 `).join('');
