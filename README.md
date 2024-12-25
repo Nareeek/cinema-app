@@ -30,7 +30,7 @@ It provides users with an intuitive experience to browse movies, view showtimes,
    - [Using Laravel Sail (Dockerized)](#using-laravel-sail-dockerized)
    - [Manual Setup (Without Sail)](#manual-setup-without-sail)
 5. [Dependencies](#dependencies)
-6. [Directory Structure](#directory-structure) 
+6. [Directory Structure](#directory-structure)
 7. [Roadmap](#roadmap)
 8. [External Resources](#external-resources)
 9. [Contributing](#contributing)
