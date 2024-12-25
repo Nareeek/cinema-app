@@ -132,7 +132,7 @@ For detailed installation instructions, see the [Installation](#installation) se
   <summary><strong>🎥 Demo Video</strong></summary>
   <p align="center">
     <video width="700" controls>
-      <source src="./assets/videos/demo.mp4" type="video/mp4">
+      <source src="https://github.com/user-attachments/assets/e46f87c3-26ba-4cb2-91c4-1483fafba00c" type="video/mp4">
       Your browser does not support the video tag.
     </video>
   </p>
