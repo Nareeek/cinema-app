@@ -223,6 +223,10 @@ For detailed installation instructions, see the [Installation](#installation) se
 
 --- 
 
+[⬆ Back to Top](#table-of-contents)
+
+---
+
 ## Manual Setup (**Without Sail**)
 1. 🛠️ **Prerequisites**:
 
