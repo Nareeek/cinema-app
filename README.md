@@ -8,7 +8,11 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Contributions](https://img.shields.io/badge/Contributions-Welcome-brightgreen)
 
-The **Cinema App** is a **web application** built with the **Laravel framework**, designed to simplify **movie ticket booking** and management. It provides users with an intuitive experience to browse movies, view showtimes, and book seats. Admin users benefit from advanced tools to efficiently manage movies, showtimes, and user bookings.
+The **Cinema App** is a **web application** built with the **Laravel framework**, designed to simplify **movie ticket booking** and management.
+
+---
+
+It provides users with an intuitive experience to browse movies, view showtimes, and book seats. Admin users benefit from advanced tools to efficiently manage movies, showtimes, and user bookings.
 
 ---
 
@@ -20,9 +24,9 @@ The **Cinema App** is a **web application** built with the **Laravel framework**
    - [Login and Registration](#login-and-registration)
    - [Movie Browsing](#movie-browsing)
    - [Admin Panel (Movie Management)](#admin-panel-movie-management)
-   - [Booking Seats](#booking-seats)
+   - [Booking Seats (steps)](#booking-seats-steps)
 3. [Demo and Media](#demo-and-media)
-4. [Installation](#installation)
+4. [Installation (locally)](#installation-locally)
    - [Using Laravel Sail (Dockerized)](#using-laravel-sail-dockerized)
    - [Manual Setup (Without Sail)](#manual-setup-without-sail)
 5. [Dependencies](#dependencies)
@@ -30,42 +34,42 @@ The **Cinema App** is a **web application** built with the **Laravel framework**
 7. [Contributing](#contributing)
 8. [Roadmap](#roadmap)
 9. [External Resources](#external-resources)
-10. [Acknowledgments & Credits](#acknowledgments-credits)
+10. [Acknowledgments & Credits](#acknowledgments-and-credits)
 11. [Contact](#contact)
 12. [License](#license)
 
 ---
 
-# Quick Start
+## Quick Start
 
-## 1. **Clone the repository**:
+1. **Clone the repository**:
    ```bash
    git clone https://github.com/Nareeek/cinema-app.git
    cd cinema-app
    ```
 
-## 2. **Install dependencies**:
+2. **Install dependencies**:
    ```bash
    composer install
    npm install
    ```
 
-## 3. **Set up `.env` file**:
+3. **Set up `.env` file**:
    ```bash
    cp .env.example .env
    ```
 
-## 4. **Run migrations**:
+4. **Run migrations**:
    ```bash
    php artisan migrate --seed
    ```
 
-## 5. **Start the development server**:
+5. **Start the development server**:
    ```bash
    php artisan serve
    ```
 
-## 6. **Access the app in your browser**:
+6. **Access the app in your browser**:
    ```
    http://127.0.0.1:8000
    ```
@@ -78,28 +82,23 @@ For detailed installation instructions, see the [Installation](#installation) se
 
 ---
 
-# Features
-## 🌟 **Key Features** of the Cinema App:
+## Features
 
-- ### **User Authentication**: Sign up, log in, and booking your seats.
-- ### **Browse Movies**: View movie details such as title, description, showtimes, and trailers.
-- ### **Book Tickets**: Select showtimes, choose seats, and confirm bookings.
-- ### **Admin Panel**: Only admin users can manage movies.
+- **User Authentication**: Sign up, log in, and booking your seats.
+- **Browse Movies**: View movie details such as title, description, showtimes, and trailers.
+- **Book Tickets**: Select showtimes, choose seats, and confirm bookings.
+- **Admin Panel**: Only admin users can manage movies.
 
 ---
 
-# How the App Works
-## 🛠️ **Overview** of the app’s functionality:
+## How the App Works
+### Login and Registration
 
-## Login and Registration
-### 🔑 **Access**:
-
-- ### **Register** to create an account.
-- ### **Log in** to access features like booking tickets.
-- ### **Admin Role**: Admin users have additional permissions to access the admin panel.
+- **Register** to create an account.
+- **Log in** to access features like booking tickets.
+- **Admin Role**: Admin users have additional permissions to access the admin panel.
 
 ### Movie Browsing
-🎥 **Explore Movies**:
 
 - **Homepage**: Displays a list of movies with showtimes and trailers.
     - The film can also be found in the **Rooms** section below.
@@ -113,8 +112,7 @@ For detailed installation instructions, see the [Installation](#installation) se
 - **Features**:
   - Add, edit, and delete movies.
 
-### Booking Seats
-🎟️ **Booking Steps**:
+### Booking Seats (steps)
 
 - **Select Showtimes**: Choose a movie and a showtime.
     - Either select a movie from the **slideshow** (by clicking on it).
@@ -128,9 +126,7 @@ For detailed installation instructions, see the [Installation](#installation) se
 
 ---
 
-# Demo and Media
-
-## 🎥 **Preview (Demo Video)**:
+## Demo and Media
 
 <details open>
   <summary><strong>🎥 Demo Video</strong></summary>
@@ -146,39 +142,33 @@ For detailed installation instructions, see the [Installation](#installation) se
 
 ## 📸 **Screenshots**:  
 
-### **Login Page**  
 <details open>
-  <summary><strong>📸 Show Login Page</strong></summary>
+  <summary><strong>Login Page</strong></summary>
   <img src="./assets/images/login-page.jpg" alt="Login Page" width="700">
 </details>
 
-### **Movie Browsing**  
 <details>
-  <summary><strong>📸 Show Movie Browsing</strong></summary>
+  <summary><strong>Movie Browsing</strong></summary>
   <img src="./assets/images/home-page.jpg" alt="Home Page" width="700">
 </details>
 
-### **Movie Details Page**  
 <details>
-  <summary><strong>📸 Show Movie Details Page</strong></summary>
+  <summary><strong>Movie Details Page</strong></summary>
   <img src="./assets/images/movie-details-page.jpg" alt="Movie Details Page" width="700">
 </details>
 
-### **Booking Page**  
 <details>
-  <summary><strong>📸 Show Booking Page</strong></summary>
+  <summary><strong>Booking Page</strong></summary>
   <img src="./assets/images/booking-page.jpg" alt="Booking Page" width="700">
 </details>
 
-### **Booking Confirmation Page**  
 <details>
-  <summary><strong>📸 Show Booking Confirmation Page</strong></summary>
+  <summary><strong>Booking Confirmation Page</strong></summary>
   <img src="./assets/images/booking-confirmation-page.jpg" alt="Booking Confirmation Page" width="700">
 </details>
 
-### **Admin Panel**  
 <details open>
-  <summary><strong>📸 Show Admin Panel</strong></summary>
+  <summary><strong>Admin Panel</strong></summary>
   <img src="./assets/images/admin-panel.jpg" alt="Admin Panel" width="700">
 </details>
 
@@ -188,27 +178,26 @@ For detailed installation instructions, see the [Installation](#installation) se
 
 ---
 
-# Installation
-## 🛠️ **Steps to Set Up the Project Locally**:
+# Installation (locally)
 
 ## Using Laravel Sail (**Dockerized**)
-### 1. **Pre-Requisites**:
+1. **Pre-Requisites**:
    - Install **Docker Desktop** (Windows/Mac) or **Docker Engine** (Linux).
    - For Windows: Install **WSL2** with an Ubuntu distribution.
    - Install Composer globally: [Get Composer](https://getcomposer.org/).
 
-### 2. **Clone the repository**:
+2. **Clone the repository**:
    ```bash
    git clone https://github.com/Nareeek/cinema-app.git
    cd cinema-app
    ```
 
-### 3. **Install Sail**:
+3. **Install Sail**:
    ```bash
    composer require laravel/sail --dev
    ```
 
-### 4. **Set up environment variables**:
+4. **Set up environment variables**:
    - Copy `.env.example` to `.env`.
    - Update database credentials:
      ```env
@@ -219,25 +208,25 @@ For detailed installation instructions, see the [Installation](#installation) se
      DB_PASSWORD=password
      ```
 
-### 5. **Start Sail**:
+5. **Start Sail**:
    ```bash
    ./vendor/bin/sail up
    ```
 
-### 6. **Run migrations and seeders**:
+6. **Run migrations and seeders**:
    ```bash
    ./vendor/bin/sail artisan migrate --seed
    ```
 
-### 7. **Access the app**:
+7. **Access the app**:
    Visit `http://localhost` in your browser.
 
 --- 
 
 ## Manual Setup (**Without Sail**)
-### 1. 🛠️ **Prerequisites**:
+1. 🛠️ **Prerequisites**:
 
-- ### Tools to install:
+- Tools to install:
 
 | Tool         | Version       | Installation Link                           |
 |--------------|---------------|---------------------------------------------|
@@ -247,41 +236,41 @@ For detailed installation instructions, see the [Installation](#installation) se
 | **Node.js**  | Latest (LTS)  | [Node.js](https://nodejs.org/)             |
 | **Docker**   | Latest        | [Docker](https://www.docker.com/)          |
 
-- ### Set up a local web server (e.g., Apache, Nginx).
+- Set up a local web server (e.g., Apache, Nginx).
 
 
-### 2. **Clone the repository**:
+2. **Clone the repository**:
    ```bash
    git clone https://github.com/Nareeek/cinema-app.git
    cd cinema-app
    ```
 
-### 3. **Set up environment variables**:
+3. **Set up environment variables**:
    - Copy `.env.example` to `.env`.
    - Update database credentials.
 
-### 4. **Install dependencies**:
+4. **Install dependencies**:
    ```bash
    composer install
    npm install
    ```
 
-### 5. **Run migrations and seeders**:
+5. **Run migrations and seeders**:
    ```bash
    php artisan migrate --seed
    ```
 
-### 6. **Start the development server**:
+6. **Start the development server**:
    ```bash
    php artisan serve
    ```
 
-### 7. **Compile assets**:
+7. **Compile assets**:
    ```bash
    npm run dev
    ```
 
-### 8. **Access the app**:
+8. **Access the app**:
    Visit `http://127.0.0.1:8000`.
 
 ---
@@ -290,20 +279,19 @@ For detailed installation instructions, see the [Installation](#installation) se
 
 ---
 
-# Dependencies
-## 📦 **Required Tools**:
+## Dependencies
+📦 **Required Tools**:
 
-- ### **PHP** (>= 8.1)
-- ### **Composer**: PHP dependency manager.
-- ### **Node.js**: For managing front-end assets.
-- ### **MySQL**: Database for storing app data.
-- ### **Vite**: Modern front-end tooling for Laravel.
-- ### **Docker/Sail**: Optional Dockerized environment.
+- **PHP** (>= 8.1)
+- **Composer**: PHP dependency manager.
+- **Node.js**: For managing front-end assets.
+- **MySQL**: Database for storing app data.
+- **Vite**: Modern front-end tooling for Laravel.
+- **Docker/Sail**: Optional Dockerized environment.
 
 ---
 
-# Directory Structure
-## 📁 **Overview**:
+## Directory Structure
 
 ```
 cinema-app/
@@ -321,15 +309,15 @@ cinema-app/
 
 ---
 
-# Roadmap
+## Roadmap
 
-- ## [x] User Authentication (Login/Registration)
-- ## [x] Movie Browsing and Booking
-- ## [x] Admin Panel for Managing Movies
-- ## [ ] Admin Panel for Managing Schedules (for each room) and reservations (seats).
-- ## [ ] Add Payment Integration
-- ## [ ] Improve Mobile Responsiveness
-- ## [ ] Add Multi-Language Support
+- [x] User Authentication (Login/Registration)
+- [x] Movie Browsing and Booking
+- [x] Admin Panel for Managing Movies
+- [ ] Admin Panel for Managing Schedules (for each room) and reservations (seats).
+- [ ] Add Payment Integration
+- [ ] Improve Mobile Responsiveness
+- [ ] Add Multi-Language Support
 
 ---
 
@@ -337,59 +325,61 @@ cinema-app/
 
 ---
 
-# External Resources
+## External Resources
 
-- ### [Laravel Framework Documentation](https://laravel.com/docs)
-- ### [Composer Official Documentation](https://getcomposer.org/doc/)
-- ### [Docker Documentation](https://docs.docker.com/)
-- ### [Vite Documentation](https://vitejs.dev/)
+- [Laravel Framework Documentation](https://laravel.com/docs)
+- [Composer Official Documentation](https://getcomposer.org/doc/)
+- [Docker Documentation](https://docs.docker.com/)
+- [Vite Documentation](https://vitejs.dev/)
 
 ---
 
-# Contributing
+## Contributing
 
 🤝 We welcome contributions from the community! Here's how you can get started:
 
-### 1. **Fork the Repository**: Click the "Fork" button at the top of this page.
+1. **Fork the Repository**: Click the "Fork" button at the top of this page.
 
-### 2. **Clone the Repository**: Use the command:
+2. **Clone the Repository**: Use the command:
    ```bash
    git clone https://github.com/your-username/cinema-app.git
    ```
-### 3. **Create a Branch: Create a new feature branch**:
+3. **Create a Branch**: Create a new feature branch:
     git checkout -b feature/your-feature-name
-### 4. **Commit Your Changes: Make your changes and commit them**:
+4. **Commit Your Changes**: Make your changes and commit them:
     git commit -m "Add your feature"
-### 5. **Push to Your Branch**:
+5. **Push to Your Branch**:
     git push origin feature/your-feature-name
-### 6. **Submit a Pull Request: Open a pull request on the main repository**.
+6. **Submit a Pull Request**: Open a pull request on the main repository.
 
 ---
 
-## Acknowledgments & Credits
+## Acknowledgments and Credits
 
-🙏 This project was made possible thanks to the efforts, tools, and resources listed below:
+🙏 This project was made possible thanks to the tools, and resources listed below:
 
 - **Framework**: Built using the powerful [Laravel Framework](https://laravel.com/).
 - **Frontend Tooling**: Asset compilation powered by [Vite](https://vitejs.dev/).
 - **Visuals & Media**: Images and assets sourced from [Unsplash](https://unsplash.com/).
 
-If you'd like to contribute to future iterations of the Cinema App, feel free to check out the [Contributing](#-contributing) section!
+If you'd like to contribute to future iterations of the Cinema App, feel free to check out the [Contributing](#contributing) section!
 
 
 ---
 
-# Contact
-- ### **GitHub**: https://github.com/Nareeek
-- ### **Linkedin**: https://www.linkedin.com/in/narek-ikhtiaryan-5a3242160/
-- ### **Email**: narek.ikhtiaryan.ni@gmail.com
+## Contact
+- **GitHub**: https://github.com/Nareeek
+- **Linkedin**: https://www.linkedin.com/in/narek-ikhtiaryan-5a3242160/
+- **Email**: narek.ikhtiaryan.ni@gmail.com
 
 ---
 
-# License
+## License
 
-### 📜 This project is licensed under the **MIT License**. You are free to use, modify, and distribute this software. See the full license [here](./LICENSE).
+📜 This project is licensed under the **MIT License**. You are free to use, modify, and distribute this software. See the full license [here](./LICENSE).
 
 ---
 
 [⬆ Back to Top](#table-of-contents)
+
+---
