@@ -22,7 +22,7 @@ class MovieController extends Controller
             abort(403, 'Unauthorized'); // Return a 403 error if not an admin
         }
 
-        $movies = Movie::paginate(10); // Return 10 movies per page
+        $movies = Movie::paginate(5); // Return 10 movies per page
         return response()->json($movies);
     }
 
