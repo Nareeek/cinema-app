@@ -33,6 +33,7 @@ header nav ul li a:hover {
 
 header .logo img {
   height: 40px;
+  min-width: 4em;
   margin-right: 15px;
   vertical-align: middle;
 }

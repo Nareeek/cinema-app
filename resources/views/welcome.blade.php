@@ -25,7 +25,7 @@
     </div>
 
     <!-- Middle Section: Rooms List -->
-    <h2>Available Rooms</h2>
+    <h2 class="available-rooms-header">Available Rooms</h2>
     <div class="room-container">
         @foreach ($rooms as $room)
         <div class="room-card" data-room-id="{{ $room->id }}">

@@ -30,6 +30,11 @@
     border: 1px solid #ccc; /* Optional border for styling */
 }
 
+.available-rooms-header {
+    font-size: xx-large;
+    font-weight: bold;
+    text-align: center;
+}
 
 /* Rooms Section */
 .room-container {
