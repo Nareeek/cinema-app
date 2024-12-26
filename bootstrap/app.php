@@ -21,7 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
-            'admin' => \App\Http\Middleware\AdminMiddleware::class, // Add this alias
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         ]);
 
         $middleware->use([

@@ -33,7 +33,9 @@ Route::get('/movies/{movie}/rooms', [MovieController::class, 'getRoomsByDate']);
 // Booking-related routes
 Route::post('/check-seats', [BookingController::class, 'checkSeatAvailability'])->name('checkSeats');
 Route::post('/check-seats-before-payment', [PaymentController::class, 'checkSeatsBeforePayment'])->name('checkSeatsBeforePayment');
-Route::get('/bookings/{id}', [BookingController::class, 'index'])->where('id', '[0-9]+');
+Route::middleware('auth')->group(function () {
+    Route::get('/bookings/{id}', [BookingController::class, 'index'])->where('id', '[0-9]+')->name('booking.page');
+});
 Route::post('/api/confirm-booking', [BookingController::class, 'confirmBooking']);
 Route::view('/bookings/success', 'bookings.success')->name('bookings.success');
 
